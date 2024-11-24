@@ -3,14 +3,17 @@ package com.planify.planify.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
 @Entity
+@ToString
 @Table(name = "plans")
 public class Plan {
 
@@ -20,6 +23,7 @@ public class Plan {
     private Long id;
 
     //specify the user that created the plan
+    @ToString.Exclude
     @ManyToOne
     @NotNull
     @JoinColumn(name = "creator_id", nullable = false)
@@ -43,7 +47,12 @@ public class Plan {
     @Column(name = "end_time")
     private ZonedDateTime endTime;
 
-    public Plan(User creator, @NonNull String title, String description, String location, ZonedDateTime startTime, ZonedDateTime endTime) {
+    //comment mapping
+    @ToString.Exclude
+    @OneToMany(mappedBy = "plan_id", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
+    public Plan(User creator, String title, String description, String location, ZonedDateTime startTime, ZonedDateTime endTime) {
         this.creator = creator;
         this.title = title;
         this.description = description;

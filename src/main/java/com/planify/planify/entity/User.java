@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@ToString
 @Table(name = "users")
 public class User {
 
@@ -36,8 +38,15 @@ public class User {
     @Column(name = "created_at", updatable = false, insertable = false)
     private Timestamp createdAt;
 
+    //plan mapping
+    @ToString.Exclude
     @OneToMany(mappedBy = "creator_id", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Plan> plans = new ArrayList<>();
+
+    //comment mapping
+    @ToString.Exclude
+    @OneToMany(mappedBy = "commenter_id", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
 
     public User(String username, String email, String password) {
