@@ -40,13 +40,18 @@ public class User {
 
     //plan mapping
     @ToString.Exclude
-    @OneToMany(mappedBy = "creator_id", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Plan> plans = new ArrayList<>();
 
     //comment mapping
     @ToString.Exclude
-    @OneToMany(mappedBy = "commenter_id", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "commenter", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
+
+    //friendships list only contains one side of the relationship due to the custom logic in Friendship class
+    @OneToMany(mappedBy = "user1", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private List<Friendship> friendships = new ArrayList<>();
 
 
     public User(String username, String email, String password) {

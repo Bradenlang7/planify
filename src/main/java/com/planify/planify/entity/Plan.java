@@ -49,7 +49,7 @@ public class Plan {
 
     //comment mapping
     @ToString.Exclude
-    @OneToMany(mappedBy = "plan_id", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "plan", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
     public Plan(User creator, String title, String description, String location, ZonedDateTime startTime, ZonedDateTime endTime) {
