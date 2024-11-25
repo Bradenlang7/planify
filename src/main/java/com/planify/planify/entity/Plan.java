@@ -52,6 +52,10 @@ public class Plan {
     @OneToMany(mappedBy = "plan", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
+    @ToString.Exclude
+    @OneToMany(mappedBy = "plan", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Approval> approvals = new ArrayList<>();
+
     public Plan(User creator, String title, String description, String location, ZonedDateTime startTime, ZonedDateTime endTime) {
         this.creator = creator;
         this.title = title;

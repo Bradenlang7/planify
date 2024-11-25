@@ -53,6 +53,10 @@ public class User {
     @ToString.Exclude
     private List<Friendship> friendships = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private List<Approval> approvals = new ArrayList<>();
+
 
     public User(String username, String email, String password) {
         this.username = username;
