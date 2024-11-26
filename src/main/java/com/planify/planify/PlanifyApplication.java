@@ -1,11 +1,14 @@
 package com.planify.planify;
 
 import com.planify.planify.entity.User;
+import com.planify.planify.repository.FriendshipRepository;
 import com.planify.planify.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+
+import java.util.List;
 
 @SpringBootApplication
 public class PlanifyApplication {
@@ -14,18 +17,22 @@ public class PlanifyApplication {
         SpringApplication.run(PlanifyApplication.class, args);
     }
 
+
     @Bean
-    CommandLineRunner run(UserRepository userRepository) {
+    CommandLineRunner run(UserRepository userRepository, FriendshipRepository friendshipRepository) {
         return args -> {
-            User mockUser = new User();
-            mockUser.setUsername("mockuser");
-            mockUser.setEmail("mockuser@example.com");
-            mockUser.setPassword("password123");
 
-            userRepository.save(mockUser);
+            // Fetch all friends for user1 (Alice)
+            List<User> friendsOfAlice = friendshipRepository.findFriendsByUserId(38L);
 
-            System.out.println("Mock user saved: " + mockUser);
+            // Print results
+            System.out.println("Friends of Alice:");
+            for (User friend : friendsOfAlice) {
+                System.out.println(friend);
+            }
+
         };
     }
+
 
 }

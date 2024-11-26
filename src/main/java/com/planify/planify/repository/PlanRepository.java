@@ -2,6 +2,8 @@ package com.planify.planify.repository;
 
 import com.planify.planify.entity.Plan;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,5 +13,11 @@ public interface PlanRepository extends JpaRepository<Plan, Long> {
     // Find all plans by creator ID
     List<Plan> findByCreatorId(Long creatorId);
 
-    
+    //query returns a plan along with all of its approvals and approvees
+    @Query(
+            "SELECT p FROM Plan p JOIN FETCH p.approvals a "
+                    + "JOIN FETCH a.user WHERE p.id = :planId"
+    )
+    Plan findPlanWithApprovalsAndUsers(@Param("planId") Long planId);
+
 }

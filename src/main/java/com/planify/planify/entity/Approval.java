@@ -2,6 +2,7 @@ package com.planify.planify.entity;
 
 import com.planify.planify.enums.ApprovalStatusEnum;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -29,6 +30,7 @@ public class Approval {
      */
     @ManyToOne
     @JoinColumn(name = "plan_id", nullable = false)
+    @NotNull
     @ToString.Exclude
     private Plan plan;
 
@@ -37,6 +39,7 @@ public class Approval {
      */
     @ManyToOne
     @JoinColumn(name = "approver_id", nullable = false)
+    @NotNull
     @ToString.Exclude
     private User user;
 
@@ -44,6 +47,7 @@ public class Approval {
      * The approval status (PENDING, APPROVED, REJECTED).
      */
     @Enumerated(EnumType.STRING)
+    @NotNull
     @Column(name = "status", nullable = false)
     private ApprovalStatusEnum status = ApprovalStatusEnum.PENDING;
 
@@ -56,7 +60,7 @@ public class Approval {
 
     public Approval() {
     }
-    
+
     public Approval(Plan plan, User user) {
         if (plan == null || user == null) {
             throw new IllegalArgumentException("Plan and User cannot be null");

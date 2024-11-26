@@ -12,9 +12,9 @@ import java.util.List;
 @Repository
 public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
 
-    // Find all users who are friends with a given user
-    @Query("SELECT CASE WHEN f.user1.id = :userId THEN f.user2 ELSE f.user1 END " +
-            "FROM Friendship f WHERE f.user1.id = :userId OR f.user2.id = :userId")
+    @Query(value = "SELECT u FROM User u JOIN Friendship f " +
+            "ON (f.user1 = u OR f.user2 = u) " +
+            "WHERE (:userId = f.user1.id OR :userId = f.user2.id) AND u.id != :userId")
     List<User> findFriendsByUserId(@Param("userId") Long userId);
 
 }

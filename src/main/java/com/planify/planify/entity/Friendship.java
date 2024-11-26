@@ -8,7 +8,7 @@ import lombok.ToString;
 
 import java.time.LocalDateTime;
 
-@Entity
+
 //unique constraint also in DB
 @Table(name = "friendships", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"user_id", "friend_id"})
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-
+@Entity
 public class Friendship {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,6 +40,10 @@ public class Friendship {
 
     //constructor ensures no duplicate entries by comparing user ids and enforcing user1 < user2
     public Friendship(User user1, User user2) {
+
+        if (user1.getId() == null || user2.getId() == null) {
+            throw new IllegalArgumentException("Users must have IDs before creating a friendship.");
+        }
         // Ensure consistent ordering
         if (user1.getId() < user2.getId()) {
             this.user1 = user1;
