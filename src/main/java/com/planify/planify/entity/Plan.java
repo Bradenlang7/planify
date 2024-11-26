@@ -57,6 +57,9 @@ public class Plan {
     private List<Approval> approvals = new ArrayList<>();
 
     public Plan(User creator, String title, String description, String location, ZonedDateTime startTime, ZonedDateTime endTime) {
+        if (creator == null || title == null || startTime == null) {
+            throw new IllegalArgumentException("Null parameter");
+        }
         this.creator = creator;
         this.title = title;
         this.description = description;

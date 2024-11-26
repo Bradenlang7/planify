@@ -41,6 +41,9 @@ public class Comment {
     private LocalDateTime createdAt;
 
     public Comment(Plan plan, User commenter, String content) {
+        if (plan == null || commenter == null || content == null) {
+            throw new IllegalArgumentException("Null parameter");
+        }
         this.plan = plan;
         this.commenter = commenter;
         this.content = content;
