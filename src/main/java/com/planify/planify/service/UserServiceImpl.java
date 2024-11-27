@@ -1,12 +1,10 @@
 package com.planify.planify.service;
 
-import com.planify.planify.entity.Friendship;
 import com.planify.planify.entity.User;
 import com.planify.planify.repository.FriendshipRepository;
 import com.planify.planify.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -55,35 +53,4 @@ public class UserServiceImpl implements UserService {
         userRepository.delete(user);
     }
 
-    @Override
-    public List<User> findFriends(Long userId) {
-        return friendshipRepository.findFriendsByUserId(userId);
-    }
-
-    @Override
-    public Friendship removeFriendship(Long userId, Long friendId) {
-        Friendship friendship = friendshipRepository.findFriendshipByUserIds(userId, friendId)
-                .orElseThrow(() -> new IllegalStateException("Friendship does not exist between user " + userId + " and user " + friendId));
-
-        friendshipRepository.delete(friendship);
-        return friendship;
-    }
-
-    @Override
-    public Friendship addFriendship(Long userId, Long friendId) {
-        if (friendshipRepository.existsByUserIds(userId, friendId)) {
-            throw new IllegalStateException("Friendship already exists");
-        }
-        User user1 = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalStateException("User not found with ID: " + userId));
-        User user2 = userRepository.findById(friendId)
-                .orElseThrow(() -> new IllegalStateException("User not found with ID: " + friendId));
-
-        Friendship friendship = new Friendship();
-        friendship.setUser1(user1);
-        friendship.setUser2(user2);
-
-        return friendshipRepository.save(friendship);
-
-    }
 }

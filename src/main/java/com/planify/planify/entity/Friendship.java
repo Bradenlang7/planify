@@ -23,6 +23,7 @@ public class Friendship {
     @Column(name = "id")
     private Long id;
 
+    //unidirectional relationship with User
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull

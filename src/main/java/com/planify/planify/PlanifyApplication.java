@@ -1,13 +1,7 @@
 package com.planify.planify;
 
-import com.planify.planify.entity.Friendship;
-import com.planify.planify.entity.User;
-import com.planify.planify.repository.FriendshipRepository;
-import com.planify.planify.repository.UserRepository;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class PlanifyApplication {
@@ -17,7 +11,7 @@ public class PlanifyApplication {
     }
 
     //******************DUMMY DATA FOR TESTING***********************
-
+/*
     @Bean
     public CommandLineRunner testQuery(UserRepository userRepository, FriendshipRepository friendshipRepository) {
         return args -> {
@@ -44,6 +38,8 @@ public class PlanifyApplication {
             System.out.println("Bob and Charlie are friends: " + bobAndCharlie); // Expected: false
         };
     }
+
+ */
 
 
 }
