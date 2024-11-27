@@ -13,9 +13,10 @@ public interface PlanService {
 
     void DeletePlan(Plan plan);
 
-    Optional<Plan> GetPlanById(long id);
+    List<Plan> GetPlansByUserId(long userId);
 
-    List<Plan> GetPlansByUserId(Long userId);
+    Optional<Plan> getPlanWithApprovals(long planId);
 
+    Optional<Plan> getPlanWithApprovalsAndComments(long planId);
 
 }

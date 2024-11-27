@@ -4,9 +4,11 @@ import com.planify.planify.entity.Friendship;
 import com.planify.planify.entity.User;
 import com.planify.planify.repository.FriendshipRepository;
 import com.planify.planify.repository.UserRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class FriendshipServiceImpl implements FriendshipService {
 
     private FriendshipRepository friendshipRepository;
