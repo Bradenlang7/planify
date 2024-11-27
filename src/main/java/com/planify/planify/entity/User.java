@@ -47,11 +47,7 @@ public class User {
     @ToString.Exclude
     @OneToMany(mappedBy = "commenter", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
-
-    //friendships list only contains one side of the relationship due to the custom logic in Friendship class
-    @OneToMany(mappedBy = "user1", cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude
-    private List<Friendship> friendships = new ArrayList<>();
+    
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
