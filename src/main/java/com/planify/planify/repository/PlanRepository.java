@@ -7,11 +7,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PlanRepository extends JpaRepository<Plan, Long> {
     // Find all plans by creator ID
-    List<Plan> findByCreatorId(Long creatorId);
+    List<Plan> findByCreatorId(long creatorId);
 
     //query returns a plan along with all of its approvals and approvees
     @Query(
@@ -19,5 +20,20 @@ public interface PlanRepository extends JpaRepository<Plan, Long> {
                     + "JOIN FETCH a.user WHERE p.id = :planId"
     )
     Plan findPlanWithApprovalsAndUsers(@Param("planId") Long planId);
+
+    //query returns a plan along with its associated approvals and users
+    @Query("SELECT DISTINCT p FROM Plan p " +
+            "JOIN FETCH p.approvals a " +
+            "JOIN FETCH a.user " +
+            "WHERE p.id = :planId")
+    Optional<Plan> findPlanWithApprovalsAndUsers(@Param("planId") long planId);
+
+    //query returns a plan with the plans associated approvals, users and comments
+    @Query("SELECT DISTINCT p FROM Plan p " +
+            "LEFT JOIN FETCH p.approvals a " +
+            "LEFT JOIN FETCH a.user " +
+            "LEFT JOIN FETCH p.comments " +
+            "WHERE p.id = :planId")
+    Optional<Plan> findPlanWithApprovalsCommentsAndUsers(@Param("planId") long planId);
 
 }

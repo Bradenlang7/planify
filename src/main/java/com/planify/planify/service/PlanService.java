@@ -3,20 +3,19 @@ package com.planify.planify.service;
 import com.planify.planify.entity.Plan;
 
 import java.util.List;
-import java.util.Optional;
 
 
 public interface PlanService {
-    Plan CreatePlan(Plan plan);
+    Plan createPlan(Plan plan);
 
-    Plan UpdatePlan(Plan plan);
+    Plan updatePlan(Plan plan);
 
-    void DeletePlan(Plan plan);
+    void deletePlan(long planId);
 
-    List<Plan> GetPlansByUserId(long userId);
+    List<Plan> getCreatorPlansByUserId(long userId);
 
-    Optional<Plan> getPlanWithApprovals(long planId);
+    Plan getPlanWithApprovalsAndUsers(long planId);
 
-    Optional<Plan> getPlanWithApprovalsAndComments(long planId);
+    Plan getPlanWithApprovalsAndComments(long planId);
 
 }

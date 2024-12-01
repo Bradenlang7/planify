@@ -1,40 +1,61 @@
 package com.planify.planify.service;
 
 import com.planify.planify.entity.Plan;
+import com.planify.planify.repository.PlanRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PlanServiceImpl implements PlanService {
-    @Override
-    public Plan CreatePlan(Plan plan) {
-        return null;
+
+    private final PlanRepository planRepository;
+
+    public PlanServiceImpl(PlanRepository planRepository) {
+        this.planRepository = planRepository;
     }
 
     @Override
-    public Plan UpdatePlan(Plan plan) {
-        return null;
+    public Plan createPlan(Plan plan) {
+        return planRepository.save(plan);
     }
 
     @Override
-    public void DeletePlan(Plan plan) {
+    public Plan updatePlan(Plan plan) {
+        Plan existingPlan = planRepository.findById(plan.getId())
+                .orElseThrow(() -> new IllegalStateException("Plan not found with id: " + plan.getId()));
+
+        existingPlan.setTitle(plan.getTitle());
+        existingPlan.setDescription(plan.getDescription());
+        existingPlan.setLocation(plan.getLocation());
+        existingPlan.setStartTime(plan.getStartTime());
+        existingPlan.setEndTime(plan.getEndTime());
+
+        return planRepository.save(existingPlan);
 
     }
 
     @Override
-    public List<Plan> GetPlansByUserId(long userId) {
-        return List.of();
+    public void deletePlan(long planId) {
+        Plan plan = planRepository.findById(planId)
+                .orElseThrow(() -> new IllegalStateException("Plan not found with id: " + planId));
+        planRepository.delete(plan);
     }
 
     @Override
-    public Optional<Plan> getPlanWithApprovals(long planId) {
-        return Optional.empty();
+    public List<Plan> getCreatorPlansByUserId(long creatorId) {
+        return planRepository.findByCreatorId(creatorId);
     }
 
     @Override
-    public Optional<Plan> getPlanWithApprovalsAndComments(long planId) {
-        return Optional.empty();
+    public Plan getPlanWithApprovalsAndUsers(long planId) {
+        return planRepository.findPlanWithApprovalsAndUsers(planId)
+                .orElseThrow(() -> new IllegalStateException("Plan and approvals not found with plan id: " + planId));
+    }
+
+    @Override
+    public Plan getPlanWithApprovalsAndComments(long planId) {
+        return planRepository.findPlanWithApprovalsCommentsAndUsers(planId)
+                .orElseThrow(() -> new IllegalStateException("Plan, approvals and comments not found with plan id: " + planId));
     }
 }

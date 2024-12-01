@@ -21,7 +21,7 @@ public class FriendshipServiceImpl implements FriendshipService {
 
     //method returns all users that are friends with a given userId
     @Override
-    public List<User> findFriendsByUserId(long userId) {
+    public List<User> getFriendsByUserId(long userId) {
         return friendshipRepository.findFriendsByUserId(userId);
     }
 
@@ -45,7 +45,7 @@ public class FriendshipServiceImpl implements FriendshipService {
 
     //method deletes a friendship between two users given both userIds
     @Override
-    public Friendship removeFriendship(long userId, long friendId) {
+    public Friendship deleteFriendship(long userId, long friendId) {
         Friendship friendship = friendshipRepository.findFriendshipByUserIds(userId, friendId)
                 .orElseThrow(() -> new IllegalStateException("Friendship does not exist between user " + userId + " and user " + friendId));
 

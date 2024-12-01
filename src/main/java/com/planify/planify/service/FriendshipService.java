@@ -6,10 +6,10 @@ import com.planify.planify.entity.User;
 import java.util.List;
 
 public interface FriendshipService {
-    List<User> findFriendsByUserId(long id);
+    List<User> getFriendsByUserId(long id);
 
     Friendship createFriendship(long userId, long friendshipId);
 
-    Friendship removeFriendship(long userId, long friendshipId);
+    Friendship deleteFriendship(long userId, long friendshipId);
 
 }
