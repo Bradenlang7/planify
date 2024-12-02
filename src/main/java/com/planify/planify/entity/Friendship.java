@@ -39,6 +39,21 @@ public class Friendship {
     @Column(name = "created_at", updatable = false, insertable = false)
     private LocalDateTime createdAt;
 
+    // Custom setters ensure ordering preffer constructor
+    public void setUser1(User user) {
+        if (this.user2 != null && user.getId() > this.user2.getId()) {
+            throw new IllegalArgumentException("User1 ID must be less than User2 ID");
+        }
+        this.user1 = user;
+    }
+
+    public void setUser2(User user) {
+        if (this.user1 != null && user.getId() < this.user1.getId()) {
+            throw new IllegalArgumentException("User2 ID must be greater than User1 ID");
+        }
+        this.user2 = user;
+    }
+
     //constructor ensures no duplicate entries by comparing user ids and enforcing user1 < user2
     public Friendship(User user1, User user2) {
 

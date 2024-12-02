@@ -36,10 +36,8 @@ public class FriendshipServiceImpl implements FriendshipService {
         User user2 = userRepository.findById(friendId)
                 .orElseThrow(() -> new IllegalStateException("User not found with ID: " + friendId));
 
-        Friendship friendship = new Friendship();
-        friendship.setUser1(user1);
-        friendship.setUser2(user2);
-
+        Friendship friendship = new Friendship(user1, user2);
+        
         return friendshipRepository.save(friendship);
     }
 
