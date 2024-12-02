@@ -28,17 +28,14 @@ public class ApprovalServiceImpl implements ApprovalService {
     @Transactional
     @Override
     public List<Approval> getApprovalsByUserId(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
-        return user.getApprovals();
-    }
+        // Check if the user exists
+        if (!userRepository.existsById(userId)) {
+            throw new IllegalArgumentException("User not found with ID: " + userId);
+        }
+        // Fetch approvals for the user
+        List<Approval> approvals = approvalRepository.findApprovalsByUserId(userId);
 
-    @Transactional
-    @Override
-    public List<Approval> getApprovalsByPlanId(Long planId) {
-        Plan plan = planRepository.findById(planId)
-                .orElseThrow(() -> new IllegalArgumentException("Plan not found with ID: " + planId));
-        return plan.getApprovals();
+        return approvals;
     }
 
     @Override
@@ -48,6 +45,7 @@ public class ApprovalServiceImpl implements ApprovalService {
         return approval;
     }
 
+    @Transactional
     @Override
     public Approval createApproval(Long userId, Long planId) {
         // Retrieve the user and plan from the database
@@ -63,6 +61,7 @@ public class ApprovalServiceImpl implements ApprovalService {
         return approvalRepository.save(approval);
     }
 
+    @Transactional
     @Override
     public Approval deleteApproval(Long approvalId) {
         Approval approval = approvalRepository.findById(approvalId)
