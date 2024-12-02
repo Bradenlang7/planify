@@ -23,6 +23,14 @@ public class User {
     private Long id;
 
     @NotNull
+    @Column(name = "firstname", nullable = false)
+    private String firstname;
+
+    @NotNull
+    @Column(name = "lastname", nullable = false)
+    private String lastname;
+
+    @NotNull
     @Column(name = "username", nullable = false)
     private String username;
 
@@ -47,7 +55,7 @@ public class User {
     @ToString.Exclude
     @OneToMany(mappedBy = "commenter", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
-    
+
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
