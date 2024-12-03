@@ -21,9 +21,9 @@ public class FriendshipRepositoryTest {
     @Test
     public void FriendshipRepository_ExistsByUserIds_ReturnsCorrectResults() {
         // Arrange: Create and save users
-        User alice = new User("Alice", "alice@example.com", "password123");
-        User bob = new User("Bob", "bob@example.com", "password123");
-        User charlie = new User("Charlie", "charlie@example.com", "password123");
+        User alice = new User("firstName", "lastName", "Alice", "alice@example.com", "password123");
+        User bob = new User("firstName", "lastname", "Bob", "bob@example.com", "password123");
+        User charlie = new User("firstName", "lastname", "Charlie", "charlie@example.com", "password123");
 
         alice = userRepository.save(alice);
         bob = userRepository.save(bob);

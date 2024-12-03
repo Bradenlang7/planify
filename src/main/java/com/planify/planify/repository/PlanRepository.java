@@ -19,7 +19,7 @@ public interface PlanRepository extends JpaRepository<Plan, Long> {
             "SELECT p FROM Plan p JOIN FETCH p.approvals a "
                     + "JOIN FETCH a.user WHERE p.id = :planId"
     )
-    Plan findPlanWithApprovalsAndUsers(@Param("planId") Long planId);
+    Optional<Plan> findPlanWithApprovalsAndUsers(@Param("planId") Long planId);
 
     //query returns a plan along with its associated approvals and users
     @Query("SELECT DISTINCT p FROM Plan p " +

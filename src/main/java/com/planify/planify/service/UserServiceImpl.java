@@ -1,37 +1,67 @@
 package com.planify.planify.service;
 
+import com.planify.planify.dto.BaseUserDTO;
+import com.planify.planify.dto.CreateUserDTO;
+import com.planify.planify.dto.UpdateUserDTO;
+import com.planify.planify.dto.UserMapper;
 import com.planify.planify.entity.User;
 import com.planify.planify.repository.FriendshipRepository;
 import com.planify.planify.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final FriendshipRepository friendshipRepository;
+    private final UserMapper userMapper;
 
-    public UserServiceImpl(UserRepository userRepository, FriendshipRepository friendshipRepository) {
+    public UserServiceImpl(UserRepository userRepository, FriendshipRepository friendshipRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.friendshipRepository = friendshipRepository;
+        this.userMapper = userMapper;
     }
 
     @Override
-    public User createUser(User user) {
+    @Transactional
+    public User createUser(CreateUserDTO createUserDTO) {
+        if (userRepository.existsByUsername(createUserDTO.username())) {
+            throw new IllegalStateException("Username already exists");
+        }
+        User user = userMapper.toUserEntity(createUserDTO);
+
         return userRepository.save(user);
     }
 
+    @Transactional
     @Override
-    public User updateUser(User user) {
-        //retrieve existing user from the db
-        User existingUser = userRepository.findById(user.getId())
-                .orElseThrow(() -> new IllegalStateException("User not found with id: " + user.getId()));
-        //update existing user
-        existingUser.setUsername(user.getUsername());
-        existingUser.setPassword(user.getPassword());
-        existingUser.setEmail(user.getEmail());
-        //CHECK HERE FOR CONFLICTS?????
-        return userRepository.save(existingUser);
+    public BaseUserDTO updateUser(UpdateUserDTO updateUserDTO) {
+        // Retrieve the existing user from the database
+        User existingUser = userRepository.findById(updateUserDTO.id())
+                .orElseThrow(() -> new IllegalStateException("User not found with id: " + updateUserDTO.id()));
+
+        // Update only the fields that are provided from the request body
+        if (updateUserDTO.username() != null) {
+
+            existingUser.setUsername(updateUserDTO.username());
+        }
+        if (updateUserDTO.email() != null) {
+            existingUser.setEmail(updateUserDTO.email());
+        }
+        if (updateUserDTO.password() != null) {
+            existingUser.setPassword(updateUserDTO.password()); // Hash the password
+        }
+        if (updateUserDTO.lastname() != null) {
+            existingUser.setLastname(updateUserDTO.lastname());
+        }
+        if (updateUserDTO.firstname() != null) {
+            existingUser.setFirstname(updateUserDTO.firstname());
+        }
+
+        // Save the updated user and return a DTO
+        User updatedUser = userRepository.save(existingUser);
+        return userMapper.toBaseUserDto(updatedUser);
     }
 
     @Override

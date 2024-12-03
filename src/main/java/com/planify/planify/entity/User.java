@@ -62,10 +62,12 @@ public class User {
     private List<Approval> approvals = new ArrayList<>();
 
 
-    public User(String username, String email, String password) {
+    public User(String firstname, String lastname, String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.firstname = firstname;
+        this.lastname = lastname;
     }
 
     public User() {
