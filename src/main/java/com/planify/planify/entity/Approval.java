@@ -34,27 +34,20 @@ public class Approval {
     @ToString.Exclude
     private Plan plan;
 
-    /**
-     * The user who is approving the plan.
-     */
+    
     @ManyToOne
     @JoinColumn(name = "approver_id", nullable = false)
     @NotNull
     @ToString.Exclude
     private User user;
 
-    /**
-     * The approval status (PENDING, APPROVED, REJECTED).
-     */
+
     @Enumerated(EnumType.STRING)
     @NotNull
     @Column(name = "status", nullable = false)
     private ApprovalStatusEnum status = ApprovalStatusEnum.PENDING;
 
-    /**
-     * The timestamp when the approval was created.
-     * Managed by the database.
-     */
+
     @Column(name = "created_at", updatable = false, insertable = false)
     private LocalDateTime createdAt;
 

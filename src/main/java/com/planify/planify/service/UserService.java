@@ -16,9 +16,9 @@ public interface UserService {
     User getUserByEmail(String email);
 
     //method to retrieve a user from the db based on id
-    User getUserById(long id);
+    BaseUserDTO getUserById(long id);
 
     //method to delete a user based on id
-    void deleteUser(long id);
+    long deleteUser(long id);
 
 }

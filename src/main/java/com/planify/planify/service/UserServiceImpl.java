@@ -43,7 +43,10 @@ public class UserServiceImpl implements UserService {
 
         // Update only the fields that are provided from the request body
         if (updateUserDTO.username() != null) {
-
+            //If username is being updated - confirm that the name is not already in use.
+            if (userRepository.existsByUsername(updateUserDTO.username())) {
+                throw new IllegalStateException("Username already exists");
+            }
             existingUser.setUsername(updateUserDTO.username());
         }
         if (updateUserDTO.email() != null) {
@@ -66,19 +69,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new IllegalStateException("User not found with email: " + email));
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalStateException("User not found with email: " + email));
     }
 
     @Override
-    public User getUserById(long id) {
-        return userRepository.findById(id).orElseThrow(() -> new IllegalStateException("User not found with id: " + id));
+    public BaseUserDTO getUserById(long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("User not found with id: " + id));
+
+        return userMapper.toBaseUserDto(user);
     }
 
     @Override
-    public void deleteUser(long id) {
+    public long deleteUser(long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("User not found with id: " + id));
         userRepository.delete(user);
+
+        return user.getId();
     }
 
 }
