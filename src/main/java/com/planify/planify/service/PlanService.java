@@ -17,6 +17,6 @@ public interface PlanService {
 
     Plan getPlanWithApprovalsAndUsers(long planId);
 
-    PlanDTO getPlanWithApprovalsAndComments(long planId);
+    PlanDTO getPlanWithApprovalsUsersAndComments(long planId);
 
 }

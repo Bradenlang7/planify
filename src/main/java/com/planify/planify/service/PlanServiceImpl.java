@@ -58,9 +58,14 @@ public class PlanServiceImpl implements PlanService {
     }
 
     @Override
-    public PlanDTO getPlanWithApprovalsAndComments(long planId) {
-        Plan plan = planRepository.findPlanWithApprovalsCommentsAndUsers(planId)
-                .orElseThrow(() -> new IllegalStateException("Plan, approvals and comments not found with plan id: " + planId));
-        return planMapper.toPlanDto(plan);
+    public PlanDTO getPlanWithApprovalsUsersAndComments(long planId) {
+        Plan planWithApprovals = planRepository.findPlanWithApprovals(planId)
+                .orElseThrow(() -> new IllegalStateException("Plan approvals not found with plan id: " + planId));
+        Plan planWithComments = planRepository.findPlanWithComments(planId)
+                .orElseThrow(() -> new IllegalStateException("Plan comments not found with plan id: " + planId));
+
+        planWithApprovals.setComments(planWithComments.getComments());
+
+        return planMapper.toPlanDto(planWithApprovals);
     }
 }

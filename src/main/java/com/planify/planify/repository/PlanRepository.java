@@ -31,9 +31,12 @@ public interface PlanRepository extends JpaRepository<Plan, Long> {
     //query returns a plan with the plans associated approvals, users and comments
     @Query("SELECT DISTINCT p FROM Plan p " +
             "LEFT JOIN FETCH p.approvals a " +
-            "LEFT JOIN FETCH a.user " +
-            "LEFT JOIN FETCH p.comments " +
             "WHERE p.id = :planId")
-    Optional<Plan> findPlanWithApprovalsCommentsAndUsers(@Param("planId") long planId);
+    Optional<Plan> findPlanWithApprovals(@Param("planId") long planId);
+
+    @Query("SELECT DISTINCT p FROM Plan p " +
+            "LEFT JOIN FETCH p.comments c " +
+            "WHERE p.id = :planId")
+    Optional<Plan> findPlanWithComments(@Param("planId") long planId);
 
 }
