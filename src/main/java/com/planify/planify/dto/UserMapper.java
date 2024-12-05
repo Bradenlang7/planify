@@ -16,10 +16,10 @@ public class UserMapper {
         return user;
     }
 
-    ;
 
     public BaseUserDTO toBaseUserDto(User user) {
         return new BaseUserDTO(
+                user.getId(),
                 user.getFirstname(),
                 user.getLastname(),
                 user.getUsername(),

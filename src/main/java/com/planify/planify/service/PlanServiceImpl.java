@@ -1,5 +1,7 @@
 package com.planify.planify.service;
 
+import com.planify.planify.dto.PlanDTO;
+import com.planify.planify.dto.PlanMapper;
 import com.planify.planify.entity.Plan;
 import com.planify.planify.repository.PlanRepository;
 import org.springframework.stereotype.Service;
@@ -10,9 +12,11 @@ import java.util.List;
 public class PlanServiceImpl implements PlanService {
 
     private final PlanRepository planRepository;
+    private final PlanMapper planMapper;
 
-    public PlanServiceImpl(PlanRepository planRepository) {
+    public PlanServiceImpl(PlanRepository planRepository, PlanMapper planMapper) {
         this.planRepository = planRepository;
+        this.planMapper = planMapper;
     }
 
     @Override
@@ -54,8 +58,9 @@ public class PlanServiceImpl implements PlanService {
     }
 
     @Override
-    public Plan getPlanWithApprovalsAndComments(long planId) {
-        return planRepository.findPlanWithApprovalsCommentsAndUsers(planId)
+    public PlanDTO getPlanWithApprovalsAndComments(long planId) {
+        Plan plan = planRepository.findPlanWithApprovalsCommentsAndUsers(planId)
                 .orElseThrow(() -> new IllegalStateException("Plan, approvals and comments not found with plan id: " + planId));
+        return planMapper.toPlanDto(plan);
     }
 }

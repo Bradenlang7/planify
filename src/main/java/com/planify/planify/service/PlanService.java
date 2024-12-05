@@ -1,5 +1,6 @@
 package com.planify.planify.service;
 
+import com.planify.planify.dto.PlanDTO;
 import com.planify.planify.entity.Plan;
 
 import java.util.List;
@@ -16,6 +17,6 @@ public interface PlanService {
 
     Plan getPlanWithApprovalsAndUsers(long planId);
 
-    Plan getPlanWithApprovalsAndComments(long planId);
+    PlanDTO getPlanWithApprovalsAndComments(long planId);
 
 }
