@@ -12,6 +12,8 @@ public interface PlanService {
     BasePlanDTO createPlan(CreatePlanDTO createPlanDTO);
 
     BasePlanDTO updatePlan(BasePlanDTO basePlanDTO);
+    
+    Plan getPlanById(Long id);
 
     void deletePlan(long planId);
 

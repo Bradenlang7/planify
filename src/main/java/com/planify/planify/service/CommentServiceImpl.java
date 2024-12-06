@@ -1,18 +1,43 @@
 package com.planify.planify.service;
 
+import com.planify.planify.dto.CommentDTO;
+import com.planify.planify.dto.CommentMapper;
+import com.planify.planify.dto.CreateCommentDTO;
 import com.planify.planify.entity.Comment;
+import com.planify.planify.entity.Plan;
+import com.planify.planify.entity.User;
 import com.planify.planify.repository.CommentRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CommentServiceImpl {
+public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
+    private final UserService userService;
+    private final PlanService planService;
+    private final CommentMapper commentMapper;
 
-    public CommentServiceImpl(CommentRepository commentRepository) {
+    public CommentServiceImpl(CommentRepository commentRepository, UserService userService, PlanService planService, CommentMapper commentMapper) {
         this.commentRepository = commentRepository;
+        this.userService = userService;
+        this.planService = planService;
+        this.commentMapper = commentMapper;
     }
 
-    Comment createComment(Comment comment) {
-        return commentRepository.save(comment);
+    @Override
+    public CommentDTO createComment(CreateCommentDTO createCommentDTO) {
+        User user = userService.getUserById(createCommentDTO.userId());
+        Plan plan = planService.getPlanById(createCommentDTO.planId());
+
+        Comment comment = new Comment(plan, user, createCommentDTO.content());
+
+        commentRepository.save(comment);
+
+        return commentMapper.toCommentDTO(comment);
+    }
+
+    @Override
+    public void deleteComment(Long commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalStateException("Comment not found with id: " + commentId));
     }
 }

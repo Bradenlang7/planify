@@ -33,9 +33,9 @@ public class PlanController {
 
     @PutMapping
     public ResponseEntity<BasePlanDTO> updatePlan(@RequestBody BasePlanDTO basePlanDTO) {
-        planService.updatePlan(basePlanDTO);
+        BasePlanDTO updatedBasePlan = planService.updatePlan(basePlanDTO);
 
-        return ResponseEntity.ok(basePlanDTO);
+        return ResponseEntity.ok(updatedBasePlan);
     }
 
     @GetMapping("/{id}/details")

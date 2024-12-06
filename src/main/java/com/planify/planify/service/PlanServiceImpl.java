@@ -63,11 +63,19 @@ public class PlanServiceImpl implements PlanService {
     }
 
     @Override
+    public Plan getPlanById(Long id) {
+        Plan plan = planRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("Plan not found with id: " + id));
+        return plan;
+    }
+
+    @Override
     public void deletePlan(long planId) {
         Plan plan = planRepository.findById(planId)
                 .orElseThrow(() -> new IllegalStateException("Plan not found with id: " + planId));
         planRepository.delete(plan);
     }
+
 
     @Override
     public List<Plan> getCreatorPlansByUserId(long creatorId) {
