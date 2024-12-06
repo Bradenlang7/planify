@@ -7,9 +7,10 @@ import com.planify.planify.dto.UserMapper;
 import com.planify.planify.entity.User;
 import com.planify.planify.service.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequestMapping("/api/users")
 public class UserController {
 
@@ -22,34 +23,27 @@ public class UserController {
     }
 
     @PostMapping
-    public User create(@RequestBody CreateUserDTO dto) {
+    public User createUser(@RequestBody CreateUserDTO dto) {
         return userService.createUser(dto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BaseUserDTO> updateUser(
-            @PathVariable Long id,
-            @RequestBody UpdateUserDTO updateUserDTO) {
-        // Ensure the ID is correctly set in the DTO and create
-        updateUserDTO = new UpdateUserDTO(id, updateUserDTO.username(), updateUserDTO.email(),
-                updateUserDTO.password(), updateUserDTO.firstname(), updateUserDTO.lastname());
-
+    public ResponseEntity<BaseUserDTO> updateUser(@RequestBody UpdateUserDTO updateUserDTO) {
         BaseUserDTO baseUserDTO = userService.updateUser(updateUserDTO);
         return ResponseEntity.ok(baseUserDTO);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BaseUserDTO> getUserById(@PathVariable long id) {
-        BaseUserDTO baseUserDTO = userService.getUserById(id);
+    public ResponseEntity<BaseUserDTO> getBaseUserDTOById(@PathVariable long id) {
+        BaseUserDTO baseUserDTO = userService.getBaseUserDTOById(id);
 
         return ResponseEntity.ok(baseUserDTO);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUserById(@PathVariable long id) {
+    public ResponseEntity<String> deleteUserById(@PathVariable long id) {
         long deletedId = userService.deleteUser(id);
 
-        System.out.println("User deleted with id: " + deletedId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("User with ID " + deletedId + " has been deleted");
     }
 }

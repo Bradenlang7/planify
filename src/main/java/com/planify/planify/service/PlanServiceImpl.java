@@ -1,8 +1,11 @@
 package com.planify.planify.service;
 
+import com.planify.planify.dto.BasePlanDTO;
+import com.planify.planify.dto.CreatePlanDTO;
 import com.planify.planify.dto.PlanDTO;
 import com.planify.planify.dto.PlanMapper;
 import com.planify.planify.entity.Plan;
+import com.planify.planify.entity.User;
 import com.planify.planify.repository.PlanRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,30 +16,50 @@ public class PlanServiceImpl implements PlanService {
 
     private final PlanRepository planRepository;
     private final PlanMapper planMapper;
+    private final UserService userService;
 
-    public PlanServiceImpl(PlanRepository planRepository, PlanMapper planMapper) {
+    public PlanServiceImpl(PlanRepository planRepository, PlanMapper planMapper, UserService userService) {
         this.planRepository = planRepository;
         this.planMapper = planMapper;
+        this.userService = userService;
     }
 
     @Override
-    public Plan createPlan(Plan plan) {
-        return planRepository.save(plan);
+    public BasePlanDTO createPlan(CreatePlanDTO createPlanDTO) {
+        Plan plan = planMapper.toPlan(createPlanDTO);
+
+        //get the plans associated user
+        User user = userService.getUserById(createPlanDTO.creatorId());
+
+        plan.setCreator(user);
+
+        planRepository.save(plan);
+
+        return planMapper.toBasePlanDto(plan);
     }
 
     @Override
-    public Plan updatePlan(Plan plan) {
-        Plan existingPlan = planRepository.findById(plan.getId())
-                .orElseThrow(() -> new IllegalStateException("Plan not found with id: " + plan.getId()));
+    public BasePlanDTO updatePlan(BasePlanDTO basePlanDTO) {
+        Plan plan = planRepository.findById(basePlanDTO.id())
+                .orElseThrow(() -> new IllegalStateException("Plan not found with id: " + basePlanDTO.id()));
+        if (basePlanDTO.title() != null) {
+            plan.setTitle(basePlanDTO.title());
+        }
+        if (basePlanDTO.description() != null) {
+            plan.setDescription(basePlanDTO.description());
+        }
+        if (basePlanDTO.location() != null) {
+            plan.setLocation(basePlanDTO.location());
+        }
+        if (basePlanDTO.startTime() != null) {
+            plan.setStartTime(basePlanDTO.startTime());
+        }
+        if (basePlanDTO.endTime() != null) {
+            plan.setEndTime(basePlanDTO.endTime());
+        }
 
-        existingPlan.setTitle(plan.getTitle());
-        existingPlan.setDescription(plan.getDescription());
-        existingPlan.setLocation(plan.getLocation());
-        existingPlan.setStartTime(plan.getStartTime());
-        existingPlan.setEndTime(plan.getEndTime());
-
-        return planRepository.save(existingPlan);
-
+        Plan updatedPlan = planRepository.save(plan);
+        return planMapper.toBasePlanDto(updatedPlan);
     }
 
     @Override

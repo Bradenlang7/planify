@@ -1,5 +1,7 @@
 package com.planify.planify.service;
 
+import com.planify.planify.dto.BasePlanDTO;
+import com.planify.planify.dto.CreatePlanDTO;
 import com.planify.planify.dto.PlanDTO;
 import com.planify.planify.entity.Plan;
 
@@ -7,9 +9,9 @@ import java.util.List;
 
 
 public interface PlanService {
-    Plan createPlan(Plan plan);
+    BasePlanDTO createPlan(CreatePlanDTO createPlanDTO);
 
-    Plan updatePlan(Plan plan);
+    BasePlanDTO updatePlan(BasePlanDTO basePlanDTO);
 
     void deletePlan(long planId);
 

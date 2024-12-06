@@ -5,7 +5,6 @@ import com.planify.planify.dto.CreateUserDTO;
 import com.planify.planify.dto.UpdateUserDTO;
 import com.planify.planify.dto.UserMapper;
 import com.planify.planify.entity.User;
-import com.planify.planify.repository.FriendshipRepository;
 import com.planify.planify.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,12 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final FriendshipRepository friendshipRepository;
     private final UserMapper userMapper;
 
-    public UserServiceImpl(UserRepository userRepository, FriendshipRepository friendshipRepository, UserMapper userMapper) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
-        this.friendshipRepository = friendshipRepository;
         this.userMapper = userMapper;
     }
 
@@ -74,11 +71,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public BaseUserDTO getUserById(long id) {
+    public BaseUserDTO getBaseUserDTOById(long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("User not found with id: " + id));
 
         return userMapper.toBaseUserDto(user);
+    }
+
+    @Override
+    public User getUserById(long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("User not found with id: " + id));
+
+        return user;
     }
 
     @Override
