@@ -1,14 +1,15 @@
 package com.planify.planify.service;
 
+import com.planify.planify.dto.BaseUserDTO;
+import com.planify.planify.dto.CreateFriendDTO;
 import com.planify.planify.entity.Friendship;
-import com.planify.planify.entity.User;
 
 import java.util.List;
 
 public interface FriendshipService {
-    List<User> getFriendsByUserId(long id);
+    List<BaseUserDTO> getFriendsByUserId(long id);
 
-    Friendship createFriendship(long userId, long friendshipId);
+    Friendship createFriendship(CreateFriendDTO createFriendDTO);
 
     Friendship deleteFriendship(long userId, long friendshipId);
 

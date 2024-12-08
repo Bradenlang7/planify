@@ -41,8 +41,6 @@ public class PlanServiceImplTest {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private PlanMapper planMapper;
 
     @BeforeEach
     void setup() {

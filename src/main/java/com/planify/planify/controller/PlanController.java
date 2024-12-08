@@ -38,6 +38,7 @@ public class PlanController {
         return ResponseEntity.ok(updatedBasePlan);
     }
 
+    // Retrieves a Plan with all nested dependencies
     @GetMapping("/{id}/details")
     public ResponseEntity<PlanDTO> getPlanWithDependenciesAll(@PathVariable long id) {
         PlanDTO planDTO = planService.getPlanWithApprovalsUsersAndComments(id);

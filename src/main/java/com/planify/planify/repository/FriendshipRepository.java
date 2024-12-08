@@ -14,9 +14,13 @@ import java.util.Optional;
 public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
 
     //query returns all users that are friends with a given user(id)
-    @Query(value = "SELECT u FROM User u JOIN Friendship f " +
-            "ON (f.user1 = u OR f.user2 = u) " +
-            "WHERE (:userId = f.user1.id OR :userId = f.user2.id) AND u.id != :userId")
+    @Query("""
+                SELECT u 
+                FROM User u 
+                JOIN Friendship f ON (f.user1 = u OR f.user2 = u)
+                WHERE (f.user1.id = :userId OR f.user2.id = :userId)
+                  AND u.id != :userId
+            """)
     List<User> findFriendsByUserId(@Param("userId") Long userId);
 
     // query returns a boolean true if friendship exists in the db given two user ids
@@ -27,7 +31,6 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
 
     //query returns a friendship based on two given user ids
     @Query("SELECT f FROM Friendship f WHERE " +
-            "(f.user1.id = :userId AND f.user2.id = :friendId) OR" +
-            "(f.user1.id = :friendId AND f.user2.id = :userId)")
+            "(f.user1.id = :userId AND f.user2.id = :friendId)")
     Optional<Friendship> findFriendshipByUserIds(@Param("userId") long userId, @Param("friendId") long friendId);
 }
