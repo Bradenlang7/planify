@@ -9,6 +9,9 @@ import com.planify.planify.entity.User;
 import com.planify.planify.repository.CommentRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
@@ -39,5 +42,15 @@ public class CommentServiceImpl implements CommentService {
     public void deleteComment(Long commentId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalStateException("Comment not found with id: " + commentId));
+        commentRepository.delete(comment);
     }
+
+    @Override
+    public List<CommentDTO> getCommentsByPlanId(Long planId) {
+        List<Comment> comments = commentRepository.findCommentsWithCommentersByPlanId(planId);
+
+        return comments.stream().map(commentMapper::toCommentDTO).collect(Collectors.toList());
+    }
+
+
 }

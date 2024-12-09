@@ -34,7 +34,7 @@ public class FriendshipController {
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<List<BaseUserDTO>> getFriendshipsByUserId(@PathVariable Long id {
+    public ResponseEntity<List<BaseUserDTO>> getFriendshipsByUserId(@PathVariable Long id) {
         List<BaseUserDTO> usersFriends = friendshipService.getFriendsByUserId(id);
 
         return ResponseEntity.ok(usersFriends);
