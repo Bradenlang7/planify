@@ -1,8 +1,11 @@
 package com.planify.planify.service;
 
+import com.planify.planify.dto.BasePlanDTO;
+import com.planify.planify.dto.PlanMapper;
 import com.planify.planify.entity.Approval;
 import com.planify.planify.entity.Plan;
 import com.planify.planify.entity.User;
+import com.planify.planify.enums.ApprovalStatusEnum;
 import com.planify.planify.repository.ApprovalRepository;
 import com.planify.planify.repository.PlanRepository;
 import com.planify.planify.repository.UserRepository;
@@ -10,19 +13,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ApprovalServiceImpl implements ApprovalService {
 
 
+    private final PlanMapper planMapper;
     private ApprovalRepository approvalRepository;
     private PlanRepository planRepository;
     private UserRepository userRepository;
 
-    ApprovalServiceImpl(ApprovalRepository approvalRepository, PlanRepository planRepository, UserRepository userRepository) {
+    ApprovalServiceImpl(ApprovalRepository approvalRepository, PlanRepository planRepository, UserRepository userRepository, PlanMapper planMapper) {
         this.approvalRepository = approvalRepository;
         this.planRepository = planRepository;
         this.userRepository = userRepository;
+        this.planMapper = planMapper;
     }
 
     @Transactional
@@ -54,10 +60,9 @@ public class ApprovalServiceImpl implements ApprovalService {
         Plan plan = planRepository.findById(planId)
                 .orElseThrow(() -> new IllegalStateException("Plan not found with ID: " + planId));
 
-        // Create the approval and set relationships
+        // Set relationships
         Approval approval = new Approval(plan, user);
 
-        // Save the approval
         return approvalRepository.save(approval);
     }
 
@@ -68,6 +73,14 @@ public class ApprovalServiceImpl implements ApprovalService {
                 .orElseThrow(() -> new IllegalStateException("Approval not found with ID: " + approvalId));
         approvalRepository.delete(approval);
         return approval;
+    }
+
+    @Transactional
+    @Override
+    public List<BasePlanDTO> getPlansByUserIdAndStatus(Long userId, ApprovalStatusEnum status) {
+        List<Plan> plans = approvalRepository.findPlansByUserIdAndStatus(userId, status);
+
+        return plans.stream().map(planMapper::toBasePlanDto).collect(Collectors.toList());
     }
 
 

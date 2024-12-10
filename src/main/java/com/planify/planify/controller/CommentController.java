@@ -32,9 +32,9 @@ public class CommentController {
         return ResponseEntity.ok("Comment with " + id + " was deleted");
     }
 
-    @GetMapping("/plans{id}")
-    public ResponseEntity<List<CommentDTO>> getCommentsWithPlanId(@PathVariable Long planId) {
-        List<CommentDTO> comments = commentService.getCommentsByPlanId(planId);
+    @GetMapping("/plans/{id}")
+    public ResponseEntity<List<CommentDTO>> getCommentsWithPlanId(@PathVariable Long id) {
+        List<CommentDTO> comments = commentService.getCommentsByPlanId(id);
 
         return ResponseEntity.ok(comments);
     }

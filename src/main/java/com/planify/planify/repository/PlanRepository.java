@@ -39,4 +39,5 @@ public interface PlanRepository extends JpaRepository<Plan, Long> {
             "WHERE p.id = :planId")
     Optional<Plan> findPlanWithComments(@Param("planId") long planId);
 
+
 }
