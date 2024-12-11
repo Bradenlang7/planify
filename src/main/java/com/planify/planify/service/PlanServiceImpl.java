@@ -1,9 +1,6 @@
 package com.planify.planify.service;
 
-import com.planify.planify.dto.BasePlanDTO;
-import com.planify.planify.dto.CreatePlanDTO;
-import com.planify.planify.dto.PlanDTO;
-import com.planify.planify.dto.PlanMapper;
+import com.planify.planify.dto.*;
 import com.planify.planify.entity.Approval;
 import com.planify.planify.entity.Plan;
 import com.planify.planify.entity.User;
@@ -49,23 +46,23 @@ public class PlanServiceImpl implements PlanService {
     }
 
     @Override
-    public BasePlanDTO updatePlan(BasePlanDTO basePlanDTO) {
-        Plan plan = planRepository.findById(basePlanDTO.id())
-                .orElseThrow(() -> new IllegalStateException("Plan not found with id: " + basePlanDTO.id()));
-        if (basePlanDTO.title() != null) {
-            plan.setTitle(basePlanDTO.title());
+    public BasePlanDTO updatePlan(long planId, UpdatePlanDTO updatePlanDTO) {
+        Plan plan = planRepository.findById(planId)
+                .orElseThrow(() -> new IllegalStateException("Plan not found with id: " + planId));
+        if (updatePlanDTO.title() != null) {
+            plan.setTitle(updatePlanDTO.title());
         }
-        if (basePlanDTO.description() != null) {
-            plan.setDescription(basePlanDTO.description());
+        if (updatePlanDTO.description() != null) {
+            plan.setDescription(updatePlanDTO.description());
         }
-        if (basePlanDTO.location() != null) {
-            plan.setLocation(basePlanDTO.location());
+        if (updatePlanDTO.location() != null) {
+            plan.setLocation(updatePlanDTO.location());
         }
-        if (basePlanDTO.startTime() != null) {
-            plan.setStartTime(basePlanDTO.startTime());
+        if (updatePlanDTO.startTime() != null) {
+            plan.setStartTime(updatePlanDTO.startTime());
         }
-        if (basePlanDTO.endTime() != null) {
-            plan.setEndTime(basePlanDTO.endTime());
+        if (updatePlanDTO.endTime() != null) {
+            plan.setEndTime(updatePlanDTO.endTime());
         }
 
         Plan updatedPlan = planRepository.save(plan);
@@ -73,7 +70,7 @@ public class PlanServiceImpl implements PlanService {
     }
 
     @Override
-    public Plan getPlanById(Long id) {
+    public Plan getPlanById(long id) {
         Plan plan = planRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("Plan not found with id: " + id));
         return plan;

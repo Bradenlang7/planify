@@ -3,6 +3,7 @@ package com.planify.planify.controller;
 import com.planify.planify.dto.BasePlanDTO;
 import com.planify.planify.dto.CreatePlanDTO;
 import com.planify.planify.dto.PlanDTO;
+import com.planify.planify.dto.UpdatePlanDTO;
 import com.planify.planify.service.PlanService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -32,8 +33,8 @@ public class PlanController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BasePlanDTO> updatePlan(@RequestBody BasePlanDTO basePlanDTO) {
-        BasePlanDTO updatedBasePlan = planService.updatePlan(basePlanDTO);
+    public ResponseEntity<BasePlanDTO> updatePlan(@PathVariable long planId, @RequestBody UpdatePlanDTO updatePlanDTO) {
+        BasePlanDTO updatedBasePlan = planService.updatePlan(planId, updatePlanDTO);
 
         return ResponseEntity.ok(updatedBasePlan);
     }
