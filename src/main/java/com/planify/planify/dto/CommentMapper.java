@@ -16,7 +16,7 @@ public class CommentMapper {
         return new CommentDTO(
                 comment.getId(),
                 comment.getContent(),
-                userMapper.toBaseUserDto(comment.getCommenter())// Map the commenter (User) to UserDTO
+                comment.getCommenter().getUsername()// Map the commenter (User) to UserDTO
         );
     }
 }

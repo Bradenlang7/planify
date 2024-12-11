@@ -10,7 +10,6 @@ import com.planify.planify.repository.CommentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -47,9 +46,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentDTO> getCommentsByPlanId(Long planId) {
-        List<Comment> comments = commentRepository.findCommentsWithCommentersByPlanId(planId);
+        List<CommentDTO> comments = commentRepository.findCommentsWithCommentersByPlanId(planId);
 
-        return comments.stream().map(commentMapper::toCommentDTO).collect(Collectors.toList());
+        return comments;
     }
 
 

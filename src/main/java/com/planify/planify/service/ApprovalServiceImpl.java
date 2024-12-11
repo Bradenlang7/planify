@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ApprovalServiceImpl implements ApprovalService {
@@ -78,9 +77,11 @@ public class ApprovalServiceImpl implements ApprovalService {
     @Transactional
     @Override
     public List<BasePlanDTO> getPlansByUserIdAndStatus(Long userId, ApprovalStatusEnum status) {
-        List<Plan> plans = approvalRepository.findPlansByUserIdAndStatus(userId, status);
+        if (!userRepository.existsById(userId)) {
+            throw new IllegalArgumentException("User not found with ID: " + userId);
+        }
 
-        return plans.stream().map(planMapper::toBasePlanDto).collect(Collectors.toList());
+        return approvalRepository.findPlansByUserIdAndStatus(userId, status);
     }
 
 

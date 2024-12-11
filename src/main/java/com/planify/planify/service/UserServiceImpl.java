@@ -22,21 +22,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User createUser(CreateUserDTO createUserDTO) {
+    public BaseUserDTO createUser(CreateUserDTO createUserDTO) {
         if (userRepository.existsByUsername(createUserDTO.username())) {
             throw new IllegalStateException("Username already exists");
         }
         User user = userMapper.toUserEntity(createUserDTO);
 
-        return userRepository.save(user);
+        userRepository.save(user);
+
+        return userMapper.toBaseUserDto(user);
     }
 
     @Transactional
     @Override
-    public BaseUserDTO updateUser(UpdateUserDTO updateUserDTO) {
+    public BaseUserDTO updateUser(long userId, UpdateUserDTO updateUserDTO) {
         // Retrieve the existing user from the database
-        User existingUser = userRepository.findById(updateUserDTO.id())
-                .orElseThrow(() -> new IllegalStateException("User not found with id: " + updateUserDTO.id()));
+        User existingUser = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("User not found with id: " + userId));
 
         // Update only the fields that are provided from the request body
         if (updateUserDTO.username() != null) {

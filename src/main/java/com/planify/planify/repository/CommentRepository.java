@@ -1,5 +1,6 @@
 package com.planify.planify.repository;
 
+import com.planify.planify.dto.CommentDTO;
 import com.planify.planify.entity.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +15,15 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findByPlanId(Long planId);
 
     // Fetch comments with their commenters
-    @Query("SELECT c FROM Comment c JOIN FETCH c.commenter WHERE c.plan.id = :planId")
-    List<Comment> findCommentsWithCommentersByPlanId(@Param("planId") Long planId);
+    @Query("""
+                SELECT new com.planify.planify.dto.CommentDTO(
+                    c.id,
+                    c.content,
+                    u.username
+                )
+                FROM Comment c
+                JOIN c.commenter u
+                WHERE c.id = :commentId
+            """)
+    List<CommentDTO> findCommentsWithCommentersByPlanId(@Param("planId") Long planId);
 }

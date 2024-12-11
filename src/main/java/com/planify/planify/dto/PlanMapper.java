@@ -40,7 +40,7 @@ public class PlanMapper {
     public BasePlanDTO toBasePlanDto(Plan plan) {
         return new BasePlanDTO(
                 plan.getId(),
-                userMapper.toBaseUserDto(plan.getCreator()), // Map the User entity to a UserDTO
+                plan.getCreator().getUsername(), // Map the User entity to a UserDTO
                 plan.getTitle(),
                 plan.getDescription(),
                 plan.getLocation(),

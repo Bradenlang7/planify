@@ -4,7 +4,6 @@ import com.planify.planify.dto.BaseUserDTO;
 import com.planify.planify.dto.CreateUserDTO;
 import com.planify.planify.dto.UpdateUserDTO;
 import com.planify.planify.dto.UserMapper;
-import com.planify.planify.entity.User;
 import com.planify.planify.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -23,13 +22,15 @@ public class UserController {
     }
 
     @PostMapping
-    public User createUser(@RequestBody CreateUserDTO dto) {
-        return userService.createUser(dto);
+    public ResponseEntity<BaseUserDTO> createUser(@RequestBody CreateUserDTO dto) {
+        BaseUserDTO user = userService.createUser(dto);
+
+        return ResponseEntity.ok(user);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BaseUserDTO> updateUser(@RequestBody UpdateUserDTO updateUserDTO) {
-        BaseUserDTO baseUserDTO = userService.updateUser(updateUserDTO);
+    public ResponseEntity<BaseUserDTO> updateUser(@PathVariable long id, @RequestBody UpdateUserDTO updateUserDTO) {
+        BaseUserDTO baseUserDTO = userService.updateUser(id, updateUserDTO);
         return ResponseEntity.ok(baseUserDTO);
     }
 

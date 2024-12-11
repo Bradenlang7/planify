@@ -31,7 +31,7 @@ public class PlanController {
         return ResponseEntity.ok("Deleted plan with id " + id);
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<BasePlanDTO> updatePlan(@RequestBody BasePlanDTO basePlanDTO) {
         BasePlanDTO updatedBasePlan = planService.updatePlan(basePlanDTO);
 

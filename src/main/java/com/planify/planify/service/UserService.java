@@ -7,10 +7,10 @@ import com.planify.planify.entity.User;
 
 public interface UserService {
     //method to persist user to the db
-    User createUser(CreateUserDTO createUserDTO);
+    BaseUserDTO createUser(CreateUserDTO createUserDTO);
 
     //method to update a user in the db
-    BaseUserDTO updateUser(UpdateUserDTO user);
+    BaseUserDTO updateUser(long id, UpdateUserDTO user);
 
     //method retrieves a user from the db based on unique email
     User getUserByEmail(String email);

@@ -4,5 +4,6 @@ package com.planify.planify.enums;
 public enum ApprovalStatusEnum {
     PENDING,
     APPROVED,
-    REJECTED
+    REJECTED,
+    OWNER
 }
