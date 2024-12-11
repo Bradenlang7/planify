@@ -76,12 +76,18 @@ public class ApprovalServiceImpl implements ApprovalService {
 
     @Transactional
     @Override
-    public List<BasePlanDTO> getPlansByUserIdAndStatus(Long userId, ApprovalStatusEnum status) {
+    public List<BasePlanDTO> getPlansByUserIdAndStatus(Long userId, ApprovalStatusEnum status, boolean includeOwner) {
         if (!userRepository.existsById(userId)) {
             throw new IllegalArgumentException("User not found with ID: " + userId);
         }
 
-        return approvalRepository.findPlansByUserIdAndStatus(userId, status);
+        return approvalRepository.findPlansByUserIdAndStatus(userId, status, includeOwner);
+    }
+
+    @Transactional
+    @Override
+    public Approval persistApproval(Approval approval) {
+        return approvalRepository.save(approval);
     }
 
 

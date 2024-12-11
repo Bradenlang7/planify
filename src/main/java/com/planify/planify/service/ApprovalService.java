@@ -15,6 +15,7 @@ public interface ApprovalService {
 
     Approval deleteApproval(Long approvalId);
 
-    List<BasePlanDTO> getPlansByUserIdAndStatus(Long userId, ApprovalStatusEnum status);
+    List<BasePlanDTO> getPlansByUserIdAndStatus(Long userId, ApprovalStatusEnum status, boolean includeOwner);
 
+    Approval persistApproval(Approval approval);
 }

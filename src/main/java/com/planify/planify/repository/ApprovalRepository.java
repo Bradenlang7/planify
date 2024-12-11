@@ -33,8 +33,10 @@ public interface ApprovalRepository extends JpaRepository<Approval, Long> {
                 JOIN a.plan p
                 JOIN p.creator u
                 WHERE a.user.id = :userId AND a.status = :status
+                OR(:includeOwner = true AND a.user.id = :userId)
             """)
-    List<BasePlanDTO> findPlansByUserIdAndStatus(@Param("userId") Long userId, @Param("status") ApprovalStatusEnum status);
+    //Include owner==true will include all the plans the user owns in the query
+    List<BasePlanDTO> findPlansByUserIdAndStatus(@Param("userId") Long userId, @Param("status") ApprovalStatusEnum status, @Param("includeOwner") boolean includeOwner);
 
 
 }

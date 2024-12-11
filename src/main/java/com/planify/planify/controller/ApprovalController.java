@@ -34,8 +34,10 @@ public class ApprovalController {
     }
 
     @GetMapping("/users/{userId}/status{status}")
-    public ResponseEntity<List<BasePlanDTO>> getPlansByUserIdAndStatus(@PathVariable Long userId, @PathVariable ApprovalStatusEnum status) {
-        List<BasePlanDTO> plans = approvalService.getPlansByUserIdAndStatus(userId, status);
+    public ResponseEntity<List<BasePlanDTO>> getPlansByUserIdAndStatus(@PathVariable Long userId,
+                                                                       @PathVariable ApprovalStatusEnum status,
+                                                                       @RequestParam(required = false, defaultValue = "false") boolean includeOwner) {
+        List<BasePlanDTO> plans = approvalService.getPlansByUserIdAndStatus(userId, status, includeOwner);// Include owner==true will return all plans owned by user in addition to plans with the specified status
 
         return ResponseEntity.ok(plans);
 

@@ -4,8 +4,10 @@ import com.planify.planify.dto.BasePlanDTO;
 import com.planify.planify.dto.CreatePlanDTO;
 import com.planify.planify.dto.PlanDTO;
 import com.planify.planify.dto.PlanMapper;
+import com.planify.planify.entity.Approval;
 import com.planify.planify.entity.Plan;
 import com.planify.planify.entity.User;
+import com.planify.planify.enums.ApprovalStatusEnum;
 import com.planify.planify.repository.PlanRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +19,13 @@ public class PlanServiceImpl implements PlanService {
     private final PlanRepository planRepository;
     private final PlanMapper planMapper;
     private final UserService userService;
+    private final ApprovalService approvalService;
 
-    public PlanServiceImpl(PlanRepository planRepository, PlanMapper planMapper, UserService userService) {
+    public PlanServiceImpl(PlanRepository planRepository, PlanMapper planMapper, UserService userService, ApprovalService approvalService) {
         this.planRepository = planRepository;
         this.planMapper = planMapper;
         this.userService = userService;
+        this.approvalService = approvalService;
     }
 
     @Override
@@ -33,9 +37,15 @@ public class PlanServiceImpl implements PlanService {
 
         plan.setCreator(user);
 
-        planRepository.save(plan);
+        Plan savedPlan = planRepository.save(plan);
 
-        return planMapper.toBasePlanDto(plan);
+        //Create a new Approval entity for the Plan with User as OWNER
+        Approval approval = new Approval(savedPlan, user);
+        approval.setStatus(ApprovalStatusEnum.OWNER);
+        approvalService.persistApproval(approval);
+
+
+        return planMapper.toBasePlanDto(savedPlan);
     }
 
     @Override
