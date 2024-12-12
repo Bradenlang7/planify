@@ -10,9 +10,9 @@ import java.util.List;
 public interface ApprovalService {
     List<Approval> getApprovalsByUserId(Long userId);
 
-    Approval getApprovalById(Long id);
+    void createApproval(Long userId, Long planId);
 
-    Approval createApproval(Long userId, Long planId);
+    String updateApproval(Long approvalId, boolean accepted);
 
     Approval deleteApproval(Long approvalId);
 

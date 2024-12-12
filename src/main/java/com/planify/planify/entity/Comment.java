@@ -32,8 +32,8 @@ public class Comment {
     @JoinColumn(name = "commenter_id", nullable = false)
     private User commenter;
 
-    @NotNull
-    @Column(name = "content", nullable = false)
+
+    @Column(name = "content")
     private String content;
 
     //timestamp handled by the database
@@ -41,8 +41,11 @@ public class Comment {
     private LocalDateTime createdAt;
 
     public Comment(Plan plan, User commenter, String content) {
-        if (plan == null || commenter == null || content == null) {
+        if (plan == null || commenter == null) {
             throw new IllegalArgumentException("Null parameter");
+        }
+        if (content == null) {
+            content = "";
         }
         this.plan = plan;
         this.commenter = commenter;

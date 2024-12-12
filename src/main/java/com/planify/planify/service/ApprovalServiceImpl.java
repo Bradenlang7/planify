@@ -21,9 +21,9 @@ public class ApprovalServiceImpl implements ApprovalService {
 
 
     private final PlanMapper planMapper;
-    private ApprovalRepository approvalRepository;
-    private PlanRepository planRepository;
-    private UserRepository userRepository;
+    private final ApprovalRepository approvalRepository;
+    private final PlanRepository planRepository;
+    private final UserRepository userRepository;
 
     ApprovalServiceImpl(ApprovalRepository approvalRepository, PlanRepository planRepository, UserRepository userRepository, PlanMapper planMapper) {
         this.approvalRepository = approvalRepository;
@@ -45,16 +45,11 @@ public class ApprovalServiceImpl implements ApprovalService {
         return approvals;
     }
 
-    @Override
-    public Approval getApprovalById(Long approvalId) {
-        Approval approval = approvalRepository.findById(approvalId)
-                .orElseThrow(() -> new IllegalStateException("Approval not found"));
-        return approval;
-    }
 
     @Transactional
     @Override
-    public Approval createApproval(Long userId, Long planId) {
+    public void createApproval(Long userId, Long planId) {
+        //********************NEED TO ADD CHECK IF APPROVAL EXISTS IN DB******************
         // Retrieve the user and plan from the database
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalStateException("User not found with ID: " + userId));
@@ -64,7 +59,25 @@ public class ApprovalServiceImpl implements ApprovalService {
         // Set relationships
         Approval approval = new Approval(plan, user);
 
-        return approvalRepository.save(approval);
+        approvalRepository.save(approval);
+    }
+
+    @Transactional
+    @Override
+    public String updateApproval(Long approvalId, boolean accepted) {
+        Approval approval = approvalRepository.findById(approvalId)
+                .orElseThrow(() -> new IllegalStateException("Approval not found with ID: " + approvalId));
+
+        if (accepted) {
+            approval.setStatus(ApprovalStatusEnum.APPROVED);
+        } else {
+            approval.setStatus(ApprovalStatusEnum.REJECTED);
+        }
+
+        approvalRepository.save(approval);
+
+        //Return for use in ApprovalController method
+        return accepted ? "Accepted" : "Rejected";
     }
 
     @Transactional
@@ -82,7 +95,7 @@ public class ApprovalServiceImpl implements ApprovalService {
         if (!userRepository.existsById(userId)) {
             throw new IllegalArgumentException("User not found with ID: " + userId);
         }
-
+        System.out.println(includeOwner);
         return approvalRepository.findPlansByUserIdAndStatus(userId, status, includeOwner);
     }
 
