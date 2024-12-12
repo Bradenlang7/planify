@@ -23,7 +23,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
                 )
                 FROM Comment c
                 JOIN c.commenter u
-                WHERE c.id = :commentId
+                WHERE c.plan.id = :planId
             """)
     List<CommentDTO> findCommentsWithCommentersByPlanId(@Param("planId") Long planId);
 }

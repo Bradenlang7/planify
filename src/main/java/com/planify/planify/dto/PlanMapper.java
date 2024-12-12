@@ -3,8 +3,6 @@ package com.planify.planify.dto;
 import com.planify.planify.entity.Plan;
 import org.springframework.stereotype.Service;
 
-import java.util.stream.Collectors;
-
 @Service
 public class PlanMapper {
     private final UserMapper userMapper;
@@ -19,6 +17,7 @@ public class PlanMapper {
     }
 
     //Maps plan to DTO object. May need to refactor due to specificity
+    /*
     public PlanDTO toPlanDto(Plan plan) {
         return new PlanDTO(
                 plan.getId(),
@@ -36,6 +35,8 @@ public class PlanMapper {
                         .collect(Collectors.toList())
         );
     }
+
+     */
 
     public BasePlanDTO toBasePlanDto(Plan plan) {
         return new BasePlanDTO(

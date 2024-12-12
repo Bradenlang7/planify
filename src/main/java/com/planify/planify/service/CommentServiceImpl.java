@@ -9,6 +9,7 @@ import com.planify.planify.entity.User;
 import com.planify.planify.repository.CommentRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -48,7 +49,8 @@ public class CommentServiceImpl implements CommentService {
     public List<CommentDTO> getCommentsByPlanId(Long planId) {
         List<CommentDTO> comments = commentRepository.findCommentsWithCommentersByPlanId(planId);
 
-        return comments;
+        // Ensure a non-null list is always returned
+        return comments != null ? comments : Collections.emptyList();
     }
 
 

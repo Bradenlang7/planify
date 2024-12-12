@@ -33,8 +33,8 @@ public class PlanController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BasePlanDTO> updatePlan(@PathVariable long planId, @RequestBody UpdatePlanDTO updatePlanDTO) {
-        BasePlanDTO updatedBasePlan = planService.updatePlan(planId, updatePlanDTO);
+    public ResponseEntity<BasePlanDTO> updatePlan(@PathVariable long id, @RequestBody UpdatePlanDTO updatePlanDTO) {
+        BasePlanDTO updatedBasePlan = planService.updatePlan(id, updatePlanDTO);
 
         return ResponseEntity.ok(updatedBasePlan);
     }

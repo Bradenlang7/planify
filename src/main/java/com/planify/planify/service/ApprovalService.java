@@ -1,5 +1,6 @@
 package com.planify.planify.service;
 
+import com.planify.planify.dto.BaseApprovalDTO;
 import com.planify.planify.dto.BasePlanDTO;
 import com.planify.planify.entity.Approval;
 import com.planify.planify.enums.ApprovalStatusEnum;
@@ -18,4 +19,6 @@ public interface ApprovalService {
     List<BasePlanDTO> getPlansByUserIdAndStatus(Long userId, ApprovalStatusEnum status, boolean includeOwner);
 
     Approval persistApproval(Approval approval);
+
+    List<BaseApprovalDTO> getApprovalsByPlanIdProjection(long planId);
 }

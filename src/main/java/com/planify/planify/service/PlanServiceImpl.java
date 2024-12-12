@@ -6,6 +6,7 @@ import com.planify.planify.entity.Plan;
 import com.planify.planify.entity.User;
 import com.planify.planify.enums.ApprovalStatusEnum;
 import com.planify.planify.repository.PlanRepository;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,12 +18,14 @@ public class PlanServiceImpl implements PlanService {
     private final PlanMapper planMapper;
     private final UserService userService;
     private final ApprovalService approvalService;
+    private final CommentService commentService;
 
-    public PlanServiceImpl(PlanRepository planRepository, PlanMapper planMapper, UserService userService, ApprovalService approvalService) {
+    public PlanServiceImpl(PlanRepository planRepository, PlanMapper planMapper, UserService userService, ApprovalService approvalService, @Lazy CommentService commentService) {
         this.planRepository = planRepository;
         this.planMapper = planMapper;
         this.userService = userService;
         this.approvalService = approvalService;
+        this.commentService = commentService;
     }
 
     @Override
@@ -97,13 +100,15 @@ public class PlanServiceImpl implements PlanService {
 
     @Override
     public PlanDTO getPlanWithApprovalsUsersAndComments(long planId) {
-        Plan planWithApprovals = planRepository.findPlanWithApprovals(planId)
+        PlanDTO plan = planRepository.findPlanProjection(planId)
                 .orElseThrow(() -> new IllegalStateException("Plan approvals not found with plan id: " + planId));
-        Plan planWithComments = planRepository.findPlanWithComments(planId)
-                .orElseThrow(() -> new IllegalStateException("Plan comments not found with plan id: " + planId));
 
-        planWithApprovals.setComments(planWithComments.getComments());
+        List<CommentDTO> comments = commentService.getCommentsByPlanId(planId);
+        List<BaseApprovalDTO> approvals = approvalService.getApprovalsByPlanIdProjection(planId);
 
-        return planMapper.toPlanDto(planWithApprovals);
+        plan.setComments(comments);
+        plan.setApprovals(approvals);
+
+        return plan;
     }
 }

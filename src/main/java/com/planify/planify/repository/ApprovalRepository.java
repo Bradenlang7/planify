@@ -1,5 +1,6 @@
 package com.planify.planify.repository;
 
+import com.planify.planify.dto.BaseApprovalDTO;
 import com.planify.planify.dto.BasePlanDTO;
 import com.planify.planify.entity.Approval;
 import com.planify.planify.enums.ApprovalStatusEnum;
@@ -38,5 +39,17 @@ public interface ApprovalRepository extends JpaRepository<Approval, Long> {
     //Include owner==true will include all the plans the user owns in the query
     List<BasePlanDTO> findPlansByUserIdAndStatus(@Param("userId") Long userId, @Param("status") ApprovalStatusEnum status, @Param("includeOwner") boolean includeOwner);
 
+    @Query("""
+                   SELECT new com.planify.planify.dto.BaseApprovalDTO(
+                   a.id,
+                   a.status,
+                   u.id,
+                   u.username
+                   )
+                   FROM Approval a
+                   JOIN a.user u
+                   WHERE a.plan.id = :planId
+            """)
+    List<BaseApprovalDTO> findBaseApprovalsByPlanIdProjection(@Param("planId") long planId);
 
 }

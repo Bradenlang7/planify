@@ -20,17 +20,17 @@ public class FriendshipController {
     }
 
     @PostMapping
-    public ResponseEntity<Friendship> createFriendship(@RequestBody CreateFriendDTO createFriendDTO) {
+    public ResponseEntity<String> createFriendship(@RequestBody CreateFriendDTO createFriendDTO) {
         Friendship friendship = friendshipService.createFriendship(createFriendDTO);
-
-        return ResponseEntity.ok(friendship);
+        System.out.println(friendship);
+        return ResponseEntity.ok("Friendship created");
     }
 
     @DeleteMapping("/users/{id1}/users/{id2}")
-    public ResponseEntity<Friendship> deleteFriendship(@PathVariable Long id1, @PathVariable Long id2) {
+    public ResponseEntity<String> deleteFriendship(@PathVariable Long id1, @PathVariable Long id2) {
         Friendship friendship = friendshipService.deleteFriendship(id1, id2);
 
-        return ResponseEntity.ok(friendship);
+        return ResponseEntity.ok("Deleted friendship " + friendship.getId());
     }
 
     @GetMapping("/users/{id}")

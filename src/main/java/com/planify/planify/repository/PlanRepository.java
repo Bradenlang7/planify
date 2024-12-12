@@ -1,5 +1,6 @@
 package com.planify.planify.repository;
 
+import com.planify.planify.dto.PlanDTO;
 import com.planify.planify.entity.Plan;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -38,6 +39,23 @@ public interface PlanRepository extends JpaRepository<Plan, Long> {
             "LEFT JOIN FETCH p.comments c " +
             "WHERE p.id = :planId")
     Optional<Plan> findPlanWithComments(@Param("planId") long planId);
+
+    @Query("""
+                SELECT new com.planify.planify.dto.PlanDTO(
+                p.id,
+                p.title,
+                p.description,
+                p.location,
+                p.startTime,
+                p.endTime,
+                c.id,
+                c.username
+                )
+                FROM Plan p
+                JOIN p.creator c
+                WHERE p.id = :planId
+            """)
+    Optional<PlanDTO> findPlanProjection(@Param("planId") long planId);
 
 
 }

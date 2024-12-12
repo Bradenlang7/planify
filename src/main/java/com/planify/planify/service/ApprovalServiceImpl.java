@@ -1,5 +1,6 @@
 package com.planify.planify.service;
 
+import com.planify.planify.dto.BaseApprovalDTO;
 import com.planify.planify.dto.BasePlanDTO;
 import com.planify.planify.dto.PlanMapper;
 import com.planify.planify.entity.Approval;
@@ -12,6 +13,7 @@ import com.planify.planify.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -88,6 +90,14 @@ public class ApprovalServiceImpl implements ApprovalService {
     @Override
     public Approval persistApproval(Approval approval) {
         return approvalRepository.save(approval);
+    }
+
+    @Transactional
+    @Override
+    public List<BaseApprovalDTO> getApprovalsByPlanIdProjection(long planId) {
+        List<BaseApprovalDTO> approvals = approvalRepository.findBaseApprovalsByPlanIdProjection(planId);
+
+        return approvals != null ? approvals : Collections.emptyList();
     }
 
 

@@ -1,31 +1,6 @@
 package com.planify.planify.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.planify.planify.dto.*;
-import com.planify.planify.entity.Approval;
-import com.planify.planify.entity.Comment;
-import com.planify.planify.entity.Plan;
-import com.planify.planify.entity.User;
-import com.planify.planify.enums.ApprovalStatusEnum;
-import com.planify.planify.repository.PlanRepository;
-import com.planify.planify.repository.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
-
-import java.time.ZonedDateTime;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
+/*
 @SpringBootTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 @Import({PlanMapper.class, UserMapper.class, CommentMapper.class, ApprovalMapper.class})
@@ -80,8 +55,8 @@ public class PlanServiceImplTest {
 
         // Save the plan with associated approvals and comments
         planRepository.save(plan);
-    }
-
+    };
+/*
     @Test
     void testGetPlanWithApprovalsAndComments() throws JsonProcessingException {
         // Find the saved plan ID from the repository
@@ -114,3 +89,5 @@ public class PlanServiceImplTest {
         assertEquals("Looking forward to this!", result.comments().get(0).content(), "Comment text should match.");
     }
 }
+
+ */

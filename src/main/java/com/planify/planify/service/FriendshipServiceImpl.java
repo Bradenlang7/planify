@@ -37,9 +37,11 @@ public class FriendshipServiceImpl implements FriendshipService {
     //method creates a friendship between two users given both userIds
     @Override
     public Friendship createFriendship(CreateFriendDTO createFriendDTO) {
-        if (friendshipRepository.existsByUserIds(createFriendDTO.userId(), createFriendDTO.userId())) {
+        System.out.println(createFriendDTO.userId());
+        if (friendshipRepository.existsByUserIds(createFriendDTO.userId(), createFriendDTO.friendId())) {
             throw new IllegalStateException("Friendship already exists");
         }
+        System.out.println(friendshipRepository.existsByUserIds(createFriendDTO.userId(), createFriendDTO.userId()));
         User user1 = userService.getUserById(createFriendDTO.userId());
         User user2 = userService.getUserById(createFriendDTO.friendId());
 

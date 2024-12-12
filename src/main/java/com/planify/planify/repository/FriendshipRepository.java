@@ -15,8 +15,8 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
 
     //query returns all users that are friends with a given user(id)
     @Query("""
-                SELECT u 
-                FROM User u 
+                SELECT u
+                FROM User u
                 JOIN Friendship f ON (f.user1 = u OR f.user2 = u)
                 WHERE (f.user1.id = :userId OR f.user2.id = :userId)
                   AND u.id != :userId
