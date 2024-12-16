@@ -6,6 +6,8 @@ import com.planify.planify.dto.UpdateUserDTO;
 import com.planify.planify.dto.UserMapper;
 import com.planify.planify.entity.User;
 import com.planify.planify.repository.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +28,11 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByUsername(createUserDTO.username())) {
             throw new IllegalStateException("Username already exists");
         }
+
         User user = userMapper.toUserEntity(createUserDTO);
+        //convert to BCrypt password before persisting user to DB
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        user.setPassword(encoder.encode(createUserDTO.password()));
 
         userRepository.save(user);
 
