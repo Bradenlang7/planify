@@ -6,10 +6,12 @@ import com.planify.planify.dto.UpdateUserDTO;
 import com.planify.planify.dto.UserMapper;
 import com.planify.planify.entity.User;
 import com.planify.planify.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -81,7 +83,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public BaseUserDTO getBaseUserDTOById(long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalStateException("User not found with id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + id));
 
         return userMapper.toBaseUserDto(user);
     }

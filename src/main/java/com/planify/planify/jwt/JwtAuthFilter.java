@@ -28,6 +28,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+        
+
         System.out.println(request);
         String path = request.getRequestURI();
         if (path.startsWith("/api/auth") || path.startsWith("/api/users")) {
