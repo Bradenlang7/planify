@@ -4,10 +4,14 @@ import com.planify.planify.dto.BaseUserDTO;
 import com.planify.planify.dto.CreateUserDTO;
 import com.planify.planify.dto.UpdateUserDTO;
 import com.planify.planify.dto.UserMapper;
+import com.planify.planify.jwt.JwtUtil;
 import com.planify.planify.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/api/users")
@@ -15,17 +19,23 @@ public class UserController {
 
     private final UserService userService;
     private final UserMapper userMapper;
+    private final JwtUtil jwtUtil;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, JwtUtil jwtUtil) {
         this.userService = userService;
+        this.jwtUtil = jwtUtil;
         this.userMapper = new UserMapper();
     }
 
     @PostMapping
-    public ResponseEntity<BaseUserDTO> createUser(@RequestBody CreateUserDTO dto) {
+    public ResponseEntity<Map<String, Object>> createUser(@RequestBody CreateUserDTO dto) {
         BaseUserDTO user = userService.createUser(dto);
-
-        return ResponseEntity.ok(user);
+        //If a user account is successfully created, create and sent JWT token to the front end.
+        String token = jwtUtil.generateToken(user.username(), user.id().toString());
+        Map<String, Object> response = new HashMap<>();
+        response.put("user", user);
+        response.put("token", token);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")

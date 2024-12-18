@@ -1,9 +1,11 @@
 package com.planify.planify.controller;
 
+import com.planify.planify.entity.User;
 import com.planify.planify.jwt.JwtUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,18 +31,23 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> request) {
+        System.out.println(request);
         String username = request.get("username");
         String password = request.get("password");
 
         // Authenticate user
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+
+        User user = (User) authentication.getPrincipal();
 
         // Generate JWT token
-        String token = jwtUtil.generateToken(username);
+        String token = jwtUtil.generateToken(username, user.getId().toString());
 
         // Return token in response
         Map<String, String> response = new HashMap<>();
         response.put("token", token);
+        System.out.println(response);
         return ResponseEntity.ok(response);
+
     }
 }
