@@ -29,6 +29,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<Map<String, Object>> createUser(@RequestBody CreateUserDTO dto) {
+        System.out.println(dto);
         BaseUserDTO user = userService.createUser(dto);
         //If a user account is successfully created, create and sent JWT token to the front end.
         String token = jwtUtil.generateToken(user.username(), user.id().toString());
