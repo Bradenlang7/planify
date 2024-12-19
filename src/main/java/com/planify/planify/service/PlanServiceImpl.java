@@ -86,7 +86,6 @@ public class PlanServiceImpl implements PlanService {
         planRepository.delete(plan);
     }
 
-
     @Override
     public List<Plan> getCreatorPlansByUserId(long creatorId) {
         return planRepository.findByCreatorId(creatorId);

@@ -15,6 +15,8 @@ public interface UserService {
     //method retrieves a user from the db based on unique email
     User getUserByEmail(String email);
 
+    User getUserByUsername(String username);
+
     User getUserById(long id);
 
     BaseUserDTO getBaseUserDTOById(long id);
