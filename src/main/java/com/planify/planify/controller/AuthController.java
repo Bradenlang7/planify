@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.HashMap;
@@ -31,6 +32,19 @@ public class AuthController {
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
         this.userService = userService;
+    }
+
+    @PostMapping("/validate-token")
+    public ResponseEntity<Void> validateToken(@RequestHeader("Authorization") String authHeader) {
+        System.out.println("Calling validateToken");
+        String token = authHeader.substring(7); // Remove "Bearer " prefix
+        String email = jwtUtil.extractEmail(token);
+
+        if (jwtUtil.validateToken(token, email)) {
+            return ResponseEntity.ok().build(); // Token is valid
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Token is invalid
+        }
     }
 
     @PostMapping("/login")

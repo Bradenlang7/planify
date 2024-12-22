@@ -14,8 +14,8 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
     private final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256); //Randomly generated key to be secure enough for HS256
-
-    public String extractUsername(String token) {
+    
+    public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -32,18 +32,18 @@ public class JwtUtil {
         return extractClaim(token, claims -> claims.get("userId", String.class));
     }
 
-    public String generateToken(String username, String userId) {
+    public String generateToken(String email, String userId) {
         return Jwts.builder()
                 .setClaims(Map.of("userId", userId))
-                .setSubject(username)
+                .setSubject(email)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 10)) // 10 days
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
 
-    public boolean validateToken(String token, String username) {
-        return username.equals(extractUsername(token)) && !isTokenExpired(token);
+    public boolean validateToken(String token, String email) {
+        return email.equals(extractEmail(token)) && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {
