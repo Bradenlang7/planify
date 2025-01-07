@@ -2,10 +2,9 @@ package com.planify.planify.controller;
 
 import com.planify.planify.dto.BasePlanDTO;
 import com.planify.planify.enums.ApprovalStatusEnum;
+import com.planify.planify.jwt.JwtUtil;
 import com.planify.planify.service.ApprovalService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,9 +14,11 @@ import java.util.List;
 @RequestMapping("/api/approvals")
 public class ApprovalController {
     private final ApprovalService approvalService;
+    private final JwtUtil jwtUtil;
 
-    public ApprovalController(ApprovalService approvalService) {
+    public ApprovalController(ApprovalService approvalService, JwtUtil jwtUtil) {
         this.approvalService = approvalService;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/users/{userId}/plans/{planId}")
@@ -43,16 +44,14 @@ public class ApprovalController {
 
     @GetMapping("/users/status/{status}")
     public ResponseEntity<List<BasePlanDTO>> getPlansByUserIdAndStatus(
+            @RequestHeader("Authorization") String authHeader,
             @PathVariable ApprovalStatusEnum status,
             @RequestParam(required = false, defaultValue = "false") boolean includeOwner) {
+        System.out.println("called getPlansByUserIdAndStatus");
 
-        //Retrieve the UserId from the SecurityContext
-        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String token = authHeader.substring(7); // Remove "Bearer " prefix
+        Long userId = Long.valueOf(jwtUtil.extractUserId(token));
 
-        if (userId == null) {
-            // Return an error response if userId is missing or invalid
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
-        }
 
         // Include owner==true will return all plans owned by user in addition to plans with the specified status
         List<BasePlanDTO> plans = approvalService.getPlansByUserIdAndStatus(userId, status, includeOwner);
