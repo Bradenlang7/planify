@@ -10,7 +10,7 @@ import java.util.List;
 
 
 public interface PlanService {
-    BasePlanDTO createPlan(CreatePlanDTO createPlanDTO);
+    BasePlanDTO createPlan(CreatePlanDTO createPlanDTO, long id);
 
     BasePlanDTO updatePlan(long id, UpdatePlanDTO updatePlanDTO);
 

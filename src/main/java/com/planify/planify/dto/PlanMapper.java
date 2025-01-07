@@ -59,7 +59,7 @@ public class PlanMapper {
         plan.setLocation(createPlanDTO.location());
         plan.setStartTime(createPlanDTO.startTime());
         plan.setEndTime(createPlanDTO.endTime());
-        //Creator to be set in the service layer
+        //Creator set in the service layer
 
         return plan;
     }

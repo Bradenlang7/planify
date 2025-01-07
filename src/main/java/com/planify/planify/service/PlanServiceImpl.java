@@ -29,11 +29,11 @@ public class PlanServiceImpl implements PlanService {
     }
 
     @Override
-    public BasePlanDTO createPlan(CreatePlanDTO createPlanDTO) {
+    public BasePlanDTO createPlan(CreatePlanDTO createPlanDTO, long userId) {
         Plan plan = planMapper.toPlan(createPlanDTO);
 
         //get the plans associated user
-        User user = userService.getUserById(createPlanDTO.creatorId());
+        User user = userService.getUserById(userId);
 
         plan.setCreator(user);
 

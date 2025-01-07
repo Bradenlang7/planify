@@ -50,17 +50,17 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> request) {
         System.out.println(request);
-        String username = request.get("username");
+        String email = request.get("email");
         String password = request.get("password");
 
         try {
             authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(username, password)
+                    new UsernamePasswordAuthenticationToken(email, password)
             );
 
-            User user = userService.getUserByUsername(username);
+            User user = userService.getUserByEmail(email);
 
-            String token = jwtUtil.generateToken(username, user.getId().toString());
+            String token = jwtUtil.generateToken(email, user.getId().toString());
 
             Map<String, String> response = new HashMap<>();
             response.put("token", token);
