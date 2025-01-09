@@ -6,7 +6,7 @@ import com.planify.planify.dto.CreateCommentDTO;
 import java.util.List;
 
 public interface CommentService {
-    public CommentDTO createComment(CreateCommentDTO createcommentDTO);
+    public CommentDTO createComment(CreateCommentDTO createcommentDTO, Long id);
 
     public void deleteComment(Long commentId);
 

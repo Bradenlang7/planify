@@ -27,8 +27,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentDTO createComment(CreateCommentDTO createCommentDTO) {
-        User user = userService.getUserById(createCommentDTO.userId());
+    public CommentDTO createComment(CreateCommentDTO createCommentDTO, Long id) {
+        User user = userService.getUserById(id);
         Plan plan = planService.getPlanById(createCommentDTO.planId());
 
         Comment comment = new Comment(plan, user, createCommentDTO.content());

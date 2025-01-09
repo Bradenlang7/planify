@@ -2,6 +2,7 @@ package com.planify.planify.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,6 +15,7 @@ import java.util.List;
 @Setter
 @Entity
 @ToString
+@AllArgsConstructor
 @Table(name = "users")
 public class User {
 
