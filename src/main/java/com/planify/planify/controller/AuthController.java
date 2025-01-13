@@ -34,6 +34,7 @@ public class AuthController {
         this.userService = userService;
     }
 
+    //Used for trying local storage by the front end
     @PostMapping("/validate-token")
     public ResponseEntity<Void> validateToken(@RequestHeader("Authorization") String authHeader) {
         System.out.println("Calling validateToken");
@@ -64,6 +65,7 @@ public class AuthController {
 
             Map<String, String> response = new HashMap<>();
             response.put("token", token);
+            response.put("username", user.getUsername());
             System.out.println(response);
             return ResponseEntity.ok(response);
 
