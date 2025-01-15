@@ -5,6 +5,7 @@ import com.planify.planify.dto.CreateFriendDTO;
 import com.planify.planify.dto.UserMapper;
 import com.planify.planify.entity.Friendship;
 import com.planify.planify.entity.User;
+import com.planify.planify.enums.FriendshipStatusEnum;
 import com.planify.planify.repository.FriendshipRepository;
 import com.planify.planify.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -26,17 +27,17 @@ public class FriendshipServiceImpl implements FriendshipService {
 
     //method returns all users that are friends with a given userId
     @Override
-    public List<BaseUserDTO> getFriendsByUserId(long userId) {
-        List<User> friends = friendshipRepository.findFriendsByUserId(userId);
+    public List<BaseUserDTO> getFriendsByUserIdAndStatus(long userId, FriendshipStatusEnum status) {
+        List<User> friends = friendshipRepository.findFriendsByUserIdAndStatus(userId, status);
 
         List<BaseUserDTO> friendships = friends.stream().map(userMapper::toBaseUserDto).toList();
 
         return friendships;
     }
 
-    //method creates a friendship between two users given both userIds
+    //method creates a friendship between two users given both userIds STAT
     @Override
-    public Friendship createFriendship(CreateFriendDTO createFriendDTO) {
+    public Friendship createFriendshipPending(CreateFriendDTO createFriendDTO) {
         System.out.println(createFriendDTO.userId());
         if (friendshipRepository.existsByUserIds(createFriendDTO.userId(), createFriendDTO.friendId())) {
             throw new IllegalStateException("Friendship already exists");
@@ -44,28 +45,27 @@ public class FriendshipServiceImpl implements FriendshipService {
         System.out.println(friendshipRepository.existsByUserIds(createFriendDTO.userId(), createFriendDTO.userId()));
         User user1 = userService.getUserById(createFriendDTO.userId());
         User user2 = userService.getUserById(createFriendDTO.friendId());
+        User sender = userService.getUserById(createFriendDTO.senderId());
 
-        Friendship friendship = new Friendship(user1, user2);
+        Friendship friendship = new Friendship(user1, user2, sender);
 
         return friendshipRepository.save(friendship);
     }
 
+    @Override
+    public void deleteFriendship(long friendshipId) {
+        friendshipRepository.deleteById(friendshipId);
+
+    }
 
     @Override
-    public Friendship deleteFriendship(long userId, long friendId) {
-        // Database enforces userId < friendId
-        if (userId > friendId) {
-            long temp = userId;
-            userId = friendId;
-            friendId = temp;
-        }
-        long finalUserId = userId;
-        long finalFriendId = friendId;
-        Friendship friendship = friendshipRepository.findFriendshipByUserIds(userId, friendId)
-                .orElseThrow(() -> new IllegalStateException("Friendship does not exist between user " + finalUserId + " and user " + finalFriendId));
+    public Friendship updateFriendShipStatusById(long friendshipId) {
+        Friendship friendship = friendshipRepository.findById(friendshipId)
+                .orElseThrow(() -> new IllegalStateException("Friendship does not exist"));
 
-        friendshipRepository.delete(friendship);
-        return friendship;
+        friendship.setStatus(FriendshipStatusEnum.APPROVED);
+
+        return friendshipRepository.save(friendship);
     }
 
 

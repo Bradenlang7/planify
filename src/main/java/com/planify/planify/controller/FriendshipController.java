@@ -3,6 +3,8 @@ package com.planify.planify.controller;
 import com.planify.planify.dto.BaseUserDTO;
 import com.planify.planify.dto.CreateFriendDTO;
 import com.planify.planify.entity.Friendship;
+import com.planify.planify.enums.FriendshipStatusEnum;
+import com.planify.planify.jwt.JwtUtil;
 import com.planify.planify.service.FriendshipService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,28 +16,36 @@ import java.util.List;
 @RequestMapping("/api/friendships")
 public class FriendshipController {
     private final FriendshipService friendshipService;
+    private final JwtUtil jwtUtil;
 
-    public FriendshipController(FriendshipService friendshipService) {
+    public FriendshipController(FriendshipService friendshipService, JwtUtil jwtUtil) {
         this.friendshipService = friendshipService;
+        this.jwtUtil = jwtUtil;
     }
 
+    // Creates a new friendship with a PENDING status
     @PostMapping
     public ResponseEntity<String> createFriendship(@RequestBody CreateFriendDTO createFriendDTO) {
-        Friendship friendship = friendshipService.createFriendship(createFriendDTO);
+        Friendship friendship = friendshipService.createFriendshipPending(createFriendDTO);
         System.out.println(friendship);
         return ResponseEntity.ok("Friendship created");
     }
 
-    @DeleteMapping("/users/{id1}/users/{id2}")
-    public ResponseEntity<String> deleteFriendship(@PathVariable Long id1, @PathVariable Long id2) {
-        Friendship friendship = friendshipService.deleteFriendship(id1, id2);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteFriendship(@PathVariable Long id) {
+        friendshipService.deleteFriendship(id);
 
-        return ResponseEntity.ok("Deleted friendship " + friendship.getId());
+        return ResponseEntity.ok("Deleted friendship ");
     }
 
-    @GetMapping("/users/{id}")
-    public ResponseEntity<List<BaseUserDTO>> getFriendshipsByUserId(@PathVariable Long id) {
-        List<BaseUserDTO> usersFriends = friendshipService.getFriendsByUserId(id);
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<BaseUserDTO>> getFriendshipsByUserId(
+            @PathVariable FriendshipStatusEnum status,
+            @RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.substring(7); // Remove "Bearer " prefix
+        Long userId = Long.valueOf(jwtUtil.extractUserId(token));
+
+        List<BaseUserDTO> usersFriends = friendshipService.getFriendsByUserIdAndStatus(userId, status);
 
         return ResponseEntity.ok(usersFriends);
     }

@@ -6,6 +6,8 @@ public record CreateFriendDTO(
         @NotNull
         Long userId,
         @NotNull
-        Long friendId
+        Long friendId,
+        @NotNull
+        Long senderId
 ) {
 }

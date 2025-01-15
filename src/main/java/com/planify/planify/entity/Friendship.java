@@ -1,5 +1,6 @@
 package com.planify.planify.entity;
 
+import com.planify.planify.enums.FriendshipStatusEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -36,6 +37,16 @@ public class Friendship {
     @JoinColumn(name = "friend_id", nullable = false)
     private User user2;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull
+    @JoinColumn(name = "sender_id", nullable = false)
+    private User sender; // Keeps track of the user that sent the request for use in the front end
+
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    @Column(name = "status", nullable = false)
+    private FriendshipStatusEnum status = FriendshipStatusEnum.PENDING;
+
     @Column(name = "created_at", updatable = false, insertable = false)
     private LocalDateTime createdAt;
 
@@ -55,7 +66,8 @@ public class Friendship {
     }
 
     //constructor ensures no duplicate entries by comparing user ids and enforcing user1 < user2
-    public Friendship(User user1, User user2) {
+    public Friendship(User user1, User user2, User sender) {
+        this.sender = sender;
 
         if (user1.getId() == null || user2.getId() == null) {
             throw new IllegalArgumentException("Users must have IDs before creating a friendship.");

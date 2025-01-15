@@ -3,14 +3,17 @@ package com.planify.planify.service;
 import com.planify.planify.dto.BaseUserDTO;
 import com.planify.planify.dto.CreateFriendDTO;
 import com.planify.planify.entity.Friendship;
+import com.planify.planify.enums.FriendshipStatusEnum;
 
 import java.util.List;
 
 public interface FriendshipService {
-    List<BaseUserDTO> getFriendsByUserId(long id);
+    List<BaseUserDTO> getFriendsByUserIdAndStatus(long id, FriendshipStatusEnum status);
 
-    Friendship createFriendship(CreateFriendDTO createFriendDTO);
+    Friendship createFriendshipPending(CreateFriendDTO createFriendDTO);
 
-    Friendship deleteFriendship(long userId, long friendshipId);
+    void deleteFriendship(long friendshipId);
+
+    Friendship updateFriendShipStatusById(long friendshipId);
 
 }

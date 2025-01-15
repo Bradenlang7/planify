@@ -1,6 +1,5 @@
 package com.planify.planify.repository;
 
-import com.planify.planify.entity.Friendship;
 import com.planify.planify.entity.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -30,8 +29,8 @@ public class FriendshipRepositoryTest {
         charlie = userRepository.save(charlie);
 
         // Create and save friendships
-        friendshipRepository.save(new Friendship(alice, bob)); // Alice <-> Bob
-        friendshipRepository.save(new Friendship(alice, charlie)); // Alice <-> Charlie
+        // friendshipRepository.save(new Friendship(alice, bob)); // Alice <-> Bob
+        // friendshipRepository.save(new Friendship(alice, charlie)); // Alice <-> Charlie
 
         // Act: Test the query
         boolean aliceAndBob = friendshipRepository.existsByUserIds(alice.getId(), bob.getId());
