@@ -4,6 +4,7 @@ import com.planify.planify.dto.BaseUserDTO;
 import com.planify.planify.dto.CreateUserDTO;
 import com.planify.planify.dto.UpdateUserDTO;
 import com.planify.planify.dto.UserMapper;
+import com.planify.planify.entity.User;
 import com.planify.planify.jwt.JwtUtil;
 import com.planify.planify.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -28,14 +29,16 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<Map<String, Object>> createUser(@RequestBody CreateUserDTO dto) {
+    public ResponseEntity<Map<String, String>> createUser(@RequestBody CreateUserDTO dto) {
         System.out.println(dto);
         BaseUserDTO user = userService.createUser(dto);
         //If a user account is successfully created, create and sent JWT token to the front end.
-        String token = jwtUtil.generateToken(user.username(), user.id().toString());
-        Map<String, Object> response = new HashMap<>();
-        response.put("user", user);
+        String token = jwtUtil.generateToken(user.email(), user.id().toString());
+        User userEntity = userService.getUserByEmail(user.email());
+        Map<String, String> response = new HashMap<>();
         response.put("token", token);
+        response.put("username", userEntity.getUsername());
+        System.out.println("Sign Up Responses" + response);
         return ResponseEntity.ok(response);
     }
 

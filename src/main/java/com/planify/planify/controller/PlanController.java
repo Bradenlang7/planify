@@ -24,8 +24,10 @@ public class PlanController {
 
     @PostMapping
     public ResponseEntity<BasePlanDTO> createPlan(@RequestBody CreatePlanDTO createPlanDTO, @RequestHeader("Authorization") String authHeader) {
+        System.out.println("CREATE PLAN DTO: " + createPlanDTO);
         String token = authHeader.substring(7); // Remove "Bearer " prefix
         Long id = Long.valueOf(jwtUtil.extractUserId(token));
+
         BasePlanDTO basePlanDTO = planService.createPlan(createPlanDTO, id);
 
         return ResponseEntity.ok(basePlanDTO);

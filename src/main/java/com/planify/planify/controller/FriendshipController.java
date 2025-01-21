@@ -42,11 +42,12 @@ public class FriendshipController {
     public ResponseEntity<List<BaseUserDTO>> getFriendshipsByUserId(
             @PathVariable FriendshipStatusEnum status,
             @RequestHeader("Authorization") String authHeader) {
+        System.out.println("Calling get friendships by user id " + authHeader);
         String token = authHeader.substring(7); // Remove "Bearer " prefix
         Long userId = Long.valueOf(jwtUtil.extractUserId(token));
 
         List<BaseUserDTO> usersFriends = friendshipService.getFriendsByUserIdAndStatus(userId, status);
-
+        System.out.println("usersFriends.size() = " + usersFriends.size());
         return ResponseEntity.ok(usersFriends);
     }
 

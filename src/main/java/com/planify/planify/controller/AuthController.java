@@ -38,13 +38,23 @@ public class AuthController {
     @PostMapping("/validate-token")
     public ResponseEntity<Void> validateToken(@RequestHeader("Authorization") String authHeader) {
         System.out.println("Calling validateToken");
-        String token = authHeader.substring(7); // Remove "Bearer " prefix
-        String email = jwtUtil.extractEmail(token);
+        try {
+            String token = authHeader.substring(7); // Remove "Bearer " prefix
+            System.out.println("Token extracted: " + token);
+            String email = jwtUtil.extractEmail(token);
+            System.out.println("Email extracted: " + email);
 
-        if (jwtUtil.validateToken(token, email)) {
-            return ResponseEntity.ok().build(); // Token is valid
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Token is invalid
+            if (jwtUtil.validateToken(token, email)) {
+                System.out.println("Valid token");
+                return ResponseEntity.ok().build(); // Token is valid
+            } else {
+                System.out.println("NOT Valid token");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Token is invalid
+            }
+        } catch (Exception e) {
+            System.out.println("Error occurred: " + e.getMessage());
+            System.out.println("SENDING BAD REQUEST");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
@@ -66,7 +76,7 @@ public class AuthController {
             Map<String, String> response = new HashMap<>();
             response.put("token", token);
             response.put("username", user.getUsername());
-            System.out.println(response);
+
             return ResponseEntity.ok(response);
 
         } catch (BadCredentialsException e) {

@@ -26,6 +26,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     }
 
     @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String path = request.getRequestURI();
+        return path.startsWith("/oauth2/") || path.startsWith("/api/auth/") || path.startsWith("/api/users/");
+    }
+
+    @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         System.out.println("Executing JwtAuthFilter for request: " + request.getRequestURI());
@@ -34,7 +40,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
         if (path.startsWith("/api/auth") || path.startsWith("/api/users")) {
             System.out.println("unsecure route");
-            // Skip JWT validation for these paths
             filterChain.doFilter(request, response);
             return;
         }

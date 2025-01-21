@@ -45,7 +45,7 @@ public class Friendship {
     @Enumerated(EnumType.STRING)
     @NotNull
     @Column(name = "status", nullable = false)
-    private FriendshipStatusEnum status = FriendshipStatusEnum.PENDING;
+    private FriendshipStatusEnum status = FriendshipStatusEnum.APPROVED;
 
     @Column(name = "created_at", updatable = false, insertable = false)
     private LocalDateTime createdAt;

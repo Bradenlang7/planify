@@ -29,23 +29,18 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/api/auth/**", "/api/users/**").permitAll();
+                    auth.requestMatchers("/api/auth/**", "/api/users/**", "/oauth2/**").permitAll();
                     auth.anyRequest()
                             .authenticated();
                 })
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                /*
                 .oauth2Login(oauth -> oauth
-                        .defaultSuccessUrl("/api/auth/oauth2-success", true)             // OAuth2 success URL
-                        .failureUrl("/api/auth/oauth2-failure")                         // OAuth2 failure URL
+                        .successHandler(oAuth2AuthenticationSuccessHandler)
                 )
-
-                 */
-
                 .build();
     }
 
@@ -66,4 +61,5 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class).build();
     }
+
 }

@@ -54,6 +54,9 @@ public class FriendshipServiceImpl implements FriendshipService {
 
     @Override
     public void deleteFriendship(long friendshipId) {
+        if (!friendshipRepository.existsById(friendshipId)) {
+            throw new IllegalStateException("Friendship does not exist");
+        }
         friendshipRepository.deleteById(friendshipId);
 
     }
