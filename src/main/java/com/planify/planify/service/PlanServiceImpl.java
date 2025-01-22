@@ -39,12 +39,21 @@ public class PlanServiceImpl implements PlanService {
 
         Plan savedPlan = planRepository.save(plan);
 
+        List<User> invitees = userService.findAllUsersByIds(createPlanDTO.invitees());
+
+        for (User invitee : invitees) {
+            Approval approval = new Approval();
+            approval.setUser(invitee);
+            approval.setPlan(savedPlan);
+            approvalService.persistApproval(approval);
+        }
+
         //Create a new Approval entity for the Plan with User as OWNER
         Approval approval = new Approval(savedPlan, user);
         approval.setStatus(ApprovalStatusEnum.OWNER);
         approvalService.persistApproval(approval);
 
-
+        //MAY NOT NEED TO RETURN*********************
         return planMapper.toBasePlanDto(savedPlan);
     }
 
@@ -96,6 +105,7 @@ public class PlanServiceImpl implements PlanService {
         return planRepository.findPlanWithApprovalsAndUsers(planId)
                 .orElseThrow(() -> new IllegalStateException("Plan and approvals not found with plan id: " + planId));
     }
+
 
     @Override
     public PlanDTO getPlanWithApprovalsUsersAndComments(long planId) {

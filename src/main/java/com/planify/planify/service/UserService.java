@@ -5,6 +5,8 @@ import com.planify.planify.dto.CreateUserDTO;
 import com.planify.planify.dto.UpdateUserDTO;
 import com.planify.planify.entity.User;
 
+import java.util.List;
+
 public interface UserService {
     //method to persist user to the db
     BaseUserDTO createUser(CreateUserDTO createUserDTO);
@@ -23,5 +25,7 @@ public interface UserService {
 
     //method to delete a user based on id
     long deleteUser(long id);
+
+    List<User> findAllUsersByIds(List<Long> ids);
 
 }

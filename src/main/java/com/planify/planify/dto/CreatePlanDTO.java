@@ -1,6 +1,7 @@
 package com.planify.planify.dto;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 //DTO to be received by the client to create a User domain entity
 public record CreatePlanDTO(
@@ -8,7 +9,8 @@ public record CreatePlanDTO(
         String description,
         String location,
         ZonedDateTime startTime,
-        ZonedDateTime endTime
+        ZonedDateTime endTime,
+        List<Long> invitees
 
 ) {
 }
