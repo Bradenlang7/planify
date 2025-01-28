@@ -21,7 +21,7 @@ public class ApprovalController {
         this.jwtUtil = jwtUtil;
     }
 
-    @PostMapping("/users/{userId}/plans/{planId}")
+    @PostMapping()
     public ResponseEntity<String> createApproval(@PathVariable long userId, @PathVariable Long planId) {
         approvalService.createApproval(userId, planId);
 

@@ -38,7 +38,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
 
         String path = request.getRequestURI();
-        if (path.startsWith("/api/auth") || path.startsWith("/api/users")) {
+        if (path.startsWith("/api/auth") || path.startsWith("/api/users") || path.startsWith("/ws")) {
             System.out.println("unsecure route");
             filterChain.doFilter(request, response);
             return;
@@ -47,7 +47,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            System.out.println("No Authorization header found");
+            System.out.println("No Authorization dfagadgfheader found");
             filterChain.doFilter(request, response);
             return;
         }

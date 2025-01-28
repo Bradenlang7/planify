@@ -33,9 +33,9 @@ public class CommentServiceImpl implements CommentService {
 
         Comment comment = new Comment(plan, user, createCommentDTO.content());
 
-        commentRepository.save(comment);
+        Comment savedComment = commentRepository.save(comment);
 
-        return commentMapper.toCommentDTO(comment);
+        return commentMapper.toCommentDTO(savedComment);
     }
 
     @Override
