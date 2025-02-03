@@ -8,10 +8,10 @@
         <version>3.4.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.planify</groupId>
-    <artifactId>planify</artifactId>
+    <groupId>com.plannr</groupId>
+    <artifactId>plannr</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>planify</name>
+    <name>plannr</name>
     <description>Demo project for Spring Boot</description>
     <url/>
     <licenses>
